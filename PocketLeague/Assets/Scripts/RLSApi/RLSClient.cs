@@ -27,13 +27,15 @@ namespace RLSApi {
 		}
 
 		public static void GetTiers(Action<Tier[]> onSuccess, Action<Error> onFail) {
-			GetArray<Tier>("data/tiers", onSuccess, onFail);
+			var postfix = "data/tiers";
+			GetArray<Tier>(postfix, onSuccess, onFail);
 		}
 
-		public static void Ba() {
-
+		public static void GetPlatforms(Action<Platform[]> onSuccess, Action<Error> onFail) {
+			var postfix = "data/platforms";
+			GetArray<Platform>(postfix, onSuccess, onFail);
 		}
-
+		
 		private static void Get<T>(string urlPostfix, Action<T> onSuccess, Action<Error> onFail) {
 			api.Get(urlPostfix, (data) => {
 				//success

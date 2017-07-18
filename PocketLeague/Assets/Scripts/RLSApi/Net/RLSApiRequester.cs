@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using RLSApi.Net.Models;
+using UnityEngine.Networking;
+using Newtonsoft.Json;
 
 namespace RLSApi {
 	public class RLSApiRequester : MonoBehaviour {
@@ -11,52 +12,74 @@ namespace RLSApi {
 		private bool _debug;
 
 		public void Init(string url, string authKey, bool debug) {
+			//set initial values passed by RLSClient
 			_url = url;
 			_authKey = authKey;
 			_debug = debug;
 		}
 
 		public void Get(string urlPosfix, Action<string> onSuccess, Action<Error> onFail) {
-			DoWWWRoutine(_url + urlPosfix, (data) => {
-				//succes
+			//start request routine
+			StartCoroutine(WebRequestRoutine(_url + urlPosfix, (data) => {
+				//on succes callback
 				onSuccess.Invoke(data);
 			}, (data) => {
-				//fail
-				var result = JsonUtility.FromJson<Error>(data);
+				//on fail callback
+				var result = JsonConvert.DeserializeObject<Error>(data);
 				onFail.Invoke(result);
-			});
+			}));
 		}
 
-		private void DoWWWRoutine(string url, Action<string> onSuccess, Action<string> onFail) {
-			//start the request routine
-			StartCoroutine(WWWRoutine(url, onSuccess, onFail));
+		public void Post(string urlPosfix, string postData, Action<string> onSuccess, Action<Error> onFail) {
+			//start post routine
+			StartCoroutine(WebPostRoutine(_url + urlPosfix, postData, (data) => {
+				//on succes callback
+				onSuccess.Invoke(data);
+			}, (data) => {
+				//on fail callback
+				var result = JsonConvert.DeserializeObject<Error>(data);
+				onFail.Invoke(result);
+			}));
 		}
 
-		private IEnumerator WWWRoutine(string url, Action<string> onSuccess, Action<string> onFail) {
-			//create auth headers
-			var headerInfo = new Dictionary<string, string>();
-			headerInfo.Add("Authorization", _authKey);
+		private IEnumerator WebRequestRoutine(string url, Action<string> onSuccess, Action<string> onFail) {
+			//create webrequest
+			UnityWebRequest www = UnityWebRequest.Get(url);
+			www.SetRequestHeader("Authorization", _authKey);
 
-			if(_debug) {
-				Debug.Log("GET from " + url);
+			//wait for response
+			if (_debug) Debug.Log("GET data from " + url);
+			yield return www.Send();
+
+			if (!www.isError) {
+				if (_debug)	Debug.Log("GOT data from " + url + ", data: " + www.downloadHandler.text);
+				onSuccess.Invoke(www.downloadHandler.text);
+			} else { 
+				if (_debug) Debug.LogError("GOT error from " + url + ", error: " + www.error);
+				onFail.Invoke(www.error);
 			}
+		}
 
-			//www request
-			var www = new WWW(url, null, headerInfo);
+		private IEnumerator WebPostRoutine(string url, string postData, Action<string> onSuccess, Action<string> onFail) {
+			//create webrequest
 
-			//wait for reply
-			yield return www;
+			var www = new UnityWebRequest(url, "POST");
+			byte[] bodyRaw = new System.Text.UTF8Encoding().GetBytes(postData);
+			www.uploadHandler = (UploadHandler)new UploadHandlerRaw(bodyRaw);
+			www.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+			www.SetRequestHeader("Content-Type", "application/json");
+			www.SetRequestHeader("Authorization", _authKey);
 
-			//return outcome
-			if (string.IsNullOrEmpty(www.error)) {
-				if (_debug) {
-					Debug.Log("GOT data from " + url + ", data: " + www.text);
-				}
-				onSuccess.Invoke(www.text);
+			//wait for response
+			if (_debug) Debug.Log("POST data to " + url + ", data: " + postData);
+			yield return www.Send();
+
+			if (!www.isError) {
+				var headers= www.GetResponseHeaders();
+				if (_debug) Debug.Log("GOT data from " + url + ", data: " + www.downloadHandler.text);
+				onSuccess.Invoke(www.downloadHandler.text);
 			} else {
-				if (_debug) {
-					Debug.LogError("GOT error from " + url + ", error: " + www.error);
-				}
+				if (_debug) Debug.LogError("GOT error from " + url + ", error: " + www.error);
 				onFail.Invoke(www.error);
 			}
 		}

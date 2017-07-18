@@ -4,6 +4,7 @@ using RLSApi.Net.Models;
 using RLSApi.Net.Requests;
 using RLSApi.Data;
 using System;
+using Newtonsoft.Json;
 
 namespace RLSApi {
 	public class RLSClient {
@@ -77,7 +78,7 @@ namespace RLSApi {
 			Get<Player>(postfix, onSuccess, onFail);
 		}
 
-		public static void GetPlayers(IEnumerable<PlayerBatchRequest> players) {
+		public static void GetPlayers(IEnumerable<PlayerBatchRequest> players, Action<Player[]> onSuccess, Action<Error> onFail) {
 			int count = 0;
 			var enumerator = players.GetEnumerator();
 			while (enumerator.MoveNext()) {
@@ -87,6 +88,9 @@ namespace RLSApi {
 				throw new ArgumentException("You are trying to request too many players, the maximum is 10.");
 			}
 
+			var postfix = "player/batch";
+			var requestData = JsonConvert.SerializeObject(players, Formatting.None);
+			Post<Player[]>(postfix, requestData, onSuccess, onFail);
 		}
 
 		/// <summary>
@@ -113,7 +117,18 @@ namespace RLSApi {
 		private static void Get<T>(string urlPostfix, Action<T> onSuccess, Action<Error> onFail) {
 			api.Get(urlPostfix, (data) => {
 				//success
-				var result = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(data);
+				var result = JsonConvert.DeserializeObject<T>(data);
+				if (onSuccess != null) onSuccess.Invoke(result);
+			}, (error) => {
+				//error
+				if (onFail != null) onFail.Invoke(error);
+			});
+		}
+
+		private static void Post<T>(string urlPostfix, string postData, Action<T> onSuccess, Action<Error> onFail) {
+			api.Post(urlPostfix, postData, (data) => {
+				//success
+				var result = JsonConvert.DeserializeObject<T>(data);
 				if (onSuccess != null) onSuccess.Invoke(result);
 			}, (error) => {
 				//error

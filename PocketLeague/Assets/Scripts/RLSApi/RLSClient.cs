@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 using RLSApi.Net.Models;
+using RLSApi.Net.Requests;
 using RLSApi.Data;
 using System;
 
@@ -63,10 +65,28 @@ namespace RLSApi {
 			Get<Playlist[]>(postfix, onSuccess, onFail);
 		}
 
-
+		/// <summary>
+		/// Returns a single player
+		/// </summary>
+		/// <param name="platform">The platform the player is on</param>
+		/// <param name="uniqueId">The UID of the player</param>
+		/// <param name="onSuccess">Returns the player</param>
+		/// <param name="onFail">Returns an error</param>
 		public static void GetPlayer(RlsPlatform platform, string uniqueId, Action<Player> onSuccess, Action<Error> onFail) {
 			var postfix = "player?unique_id=" + Uri.EscapeDataString(uniqueId) + "&platform_id=" + ((int)platform);
 			Get<Player>(postfix, onSuccess, onFail);
+		}
+
+		public static void GetPlayers(IEnumerable<PlayerBatchRequest> players) {
+			int count = 0;
+			var enumerator = players.GetEnumerator();
+			while (enumerator.MoveNext()) {
+				count++;
+			}
+			if (count > 10) {
+				throw new ArgumentException("You are trying to request too many players, the maximum is 10.");
+			}
+
 		}
 
 		/// <summary>

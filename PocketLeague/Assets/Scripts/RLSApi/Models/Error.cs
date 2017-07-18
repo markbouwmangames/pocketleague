@@ -1,9 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 
-namespace RLSApi.Models {
-	[Serializable]
-	public class Error {
-		public int Code;
-		public string Message;
-	}
+namespace RLSApi.Net.Models
+{
+    public class Error
+    {
+        [JsonProperty("code", Required = Required.Always)]
+        public int Code { get; set; }
+
+        [JsonProperty("message", Required = Required.Always)]
+        public string Message { get; set; }
+    }
 }

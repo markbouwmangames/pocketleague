@@ -1,19 +1,25 @@
 ﻿using System;
+using Newtonsoft.Json;
 using RLSApi.Util;
 
-namespace RLSApi.Models {
-	[Serializable]
+namespace RLSApi.Net.Models {
 	public class Season {
-		public int seasonId;
-		public long startedOn;
-		public long? endedOn;
+		[JsonProperty("seasonId", Required = Required.Always)]
+		public int SeasonId { get; set; }
 
-		public DateTimeOffset GetStartDate() {
-			return TimeUtil.UnixTimeStampToDateTime(startedOn);
-		}
+		[JsonProperty("startedOn", Required = Required.Always)]
+		public long StartedOnUnix { get; set; }
 
-		public DateTimeOffset GetEndDate() {
-			return endedOn.HasValue ? TimeUtil.UnixTimeStampToDateTime(endedOn.Value) : default(DateTimeOffset);
-		}
+		[JsonIgnore]
+		public DateTimeOffset StartedOn { get { return TimeUtil.UnixTimeStampToDateTime(StartedOnUnix); } }
+
+		/// <summary>
+		///     <see cref="EndedOnUnix"/> is <code>null</code> if the season has not ended yet.
+		/// </summary>
+		[JsonProperty("endedOn", Required = Required.AllowNull)]
+		public long? EndedOnUnix { get; set; }
+
+		[JsonIgnore]
+		public DateTimeOffset EndedOn { get { return EndedOnUnix.HasValue ? TimeUtil.UnixTimeStampToDateTime(EndedOnUnix.Value) : default(DateTimeOffset); } }
 	}
 }

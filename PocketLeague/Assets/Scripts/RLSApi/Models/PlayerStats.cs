@@ -1,13 +1,25 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 
-namespace RLSApi.Models {
-	[Serializable]
-	public class PlayerStats {
-		public int wins;
-		public int goals;
-		public int mvps;
-		public int saves;
-		public int shots;
-		public int assists;
-	}
+namespace RLSApi.Net.Models
+{
+    public class PlayerStats
+    {
+        [JsonProperty("wins", Required = Required.Always)]
+        public int Wins { get; set; }
+
+        [JsonProperty("goals", Required = Required.Always)]
+        public int Goals { get; set; }
+
+        [JsonProperty("mvps", Required = Required.Always)]
+        public int Mvps { get; set; }
+
+        [JsonProperty("saves", Required = Required.Always)]
+        public int Saves { get; set; }
+
+        [JsonProperty("shots", Required = Required.Always)]
+        public int Shots { get; set; }
+
+        [JsonProperty("assists", Required = Required.Always)]
+        public int Assists { get; set; }
+    }
 }

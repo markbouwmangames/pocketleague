@@ -1,9 +1,16 @@
 ﻿using System;
+using Newtonsoft.Json;
+using RLSApi.Util;
 
-namespace RLSApi.Models {
-	[Serializable]
+namespace RLSApi.Net.Models {
 	public class PlaylistPopulation {
-		public int players;
-		public long updatedAt;
+		[JsonProperty("players", Required = Required.Always)]
+		public int Players { get; set; }
+
+		[JsonProperty("updatedAt", Required = Required.Always)]
+		public long UpdatedAtUnix { get; set; }
+
+		[JsonIgnore]
+		public DateTimeOffset UpdatedAt { get { return TimeUtil.UnixTimeStampToDateTime(UpdatedAtUnix); } }
 	}
 }

@@ -2,7 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using RLSApi.Models;
+using RLSApi.Net.Models;
 
 namespace RLSApi {
 	public class RLSApiRequester : MonoBehaviour {

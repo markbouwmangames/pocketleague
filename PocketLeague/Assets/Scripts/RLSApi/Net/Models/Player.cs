@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using RLSApi.Data;
+using RLSApi.Util;
+using System;
 
 namespace RLSApi.Net.Models
 {
@@ -31,15 +33,23 @@ namespace RLSApi.Net.Models
         public Dictionary<RlsSeason, Dictionary<RlsPlaylistRanked, PlayerRank>> RankedSeasons { get; set; }
 
         [JsonProperty("lastRequested", Required = Required.Always)]
-        public uint LastRequested { get; set; }
+        public long LastRequestedUnix { get; set; }
+		[JsonIgnore]
+		public DateTimeOffset LastRequested { get { return TimeUtil.UnixTimeStampToDateTime(LastRequestedUnix); } }
 
-        [JsonProperty("createdAt", Required = Required.Always)]
-        public uint CreatedAt { get; set; }
+		[JsonProperty("createdAt", Required = Required.Always)]
+        public long CreatedAtUnix { get; set; }
+		[JsonIgnore]
+		public DateTimeOffset CreatedAt { get { return TimeUtil.UnixTimeStampToDateTime(CreatedAtUnix); } }
 
-        [JsonProperty("updatedAt", Required = Required.Always)]
-        public uint UpdatedAt { get; set; }
+		[JsonProperty("updatedAt", Required = Required.Always)]
+        public long UpdatedAtUnix { get; set; }
+		[JsonIgnore]
+		public DateTimeOffset UpdatedAt { get { return TimeUtil.UnixTimeStampToDateTime(UpdatedAtUnix); } }
 
-        [JsonProperty("nextUpdateAt", Required = Required.Always)]
-        public uint NextUpdateAt { get; set; }
-    }
+		[JsonProperty("nextUpdateAt", Required = Required.Always)]
+        public long NextUpdateAtUnix { get; set; }
+		[JsonIgnore]
+		public DateTimeOffset NextUpdateAt { get { return TimeUtil.UnixTimeStampToDateTime(NextUpdateAtUnix); } }
+	}
 }

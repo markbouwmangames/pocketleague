@@ -25,7 +25,7 @@ namespace RLSApi {
 				onSuccess.Invoke(data);
 			}, (data) => {
 				//on fail callback
-				var result = JsonConvert.DeserializeObject<Error>(data);
+                var result = new Error() { Message = data };
 				onFail.Invoke(result);
 			}));
 		}
@@ -36,8 +36,8 @@ namespace RLSApi {
 				//on succes callback
 				onSuccess.Invoke(data);
 			}, (data) => {
-				//on fail callback
-				var result = JsonConvert.DeserializeObject<Error>(data);
+                //on fail callback
+                var result = new Error() { Message = data };
 				onFail.Invoke(result);
 			}));
 		}
@@ -75,7 +75,6 @@ namespace RLSApi {
 			yield return www.Send();
 
 			if (!www.isError) {
-				var headers= www.GetResponseHeaders();
 				if (_debug) Debug.Log("GOT data from " + url + ", data: " + www.downloadHandler.text);
 				onSuccess.Invoke(www.downloadHandler.text);
 			} else {

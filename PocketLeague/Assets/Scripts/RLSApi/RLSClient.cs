@@ -93,6 +93,16 @@ namespace RLSApi {
 			Post<Player[]>(postfix, requestData, onSuccess, onFail);
 		}
 
+		public static void GetLeaderboardRanked(RlsPlaylistRanked playlistRanked, Action<Player[]> onSuccess, Action<Error> onFail) {
+			var postfix = "leaderboard/ranked?playlist_id=" + ((int)playlistRanked);
+			Get<Player[]>(postfix, onSuccess, onFail);
+		}
+
+		public static void GetLeaderboardStats(RlsStatType statType, Action<Player[]> onSuccess, Action<Error> onFail) {
+			var postfix = "leaderboard/stat?type=" + statType.ToString().ToLower();
+			Get<Player[]>(postfix, onSuccess, onFail);
+		}
+
 		/// <summary>
 		/// From here are the internal workings of the RLSClient
 		/// </summary>

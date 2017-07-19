@@ -21,9 +21,7 @@ public class InfoView : PlayerViewChild {
 		var timeStrings = updateTimeS.Split('T');
 		string date = updateTimeD.Replace('/', '-');
 		string time = timeStrings[timeStrings.Length-1];
-		
-		CopyDictionary.Get("LASTUPDATE");
-
-		_lastUpdatedAtTime.text = "Last update: " + date + ", at " + time + " GMT";
-	}
+        CopyDictionary.SetLanguage(Language.EN);
+        _lastUpdatedAtTime.text = CopyDictionary.Get("LASTUPDATE", date, time); 
+    }
 }

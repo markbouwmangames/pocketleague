@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 
 public enum Language {
-	English = 0,
+	EN = 0,
+    NL = 1,
 }
 
 public class CopyDictionary {
 	private static string KEYLOCATION = "_language";
+    private static string KEYNOTFOUND = "KEYNOTFOUND";
 
 	private static bool initialised = false;
 	private static Language currentLanguage;
@@ -19,7 +21,6 @@ public class CopyDictionary {
 		PlayerPrefs.SetInt(KEYLOCATION, ((int)(language)));
 
 		string filePath = "Copy/" + language.ToString();
-		Debug.Log(filePath);
 		TextAsset targetFile = Resources.Load<TextAsset>(filePath);
 		var json =  targetFile.text;
 		copy = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
@@ -27,17 +28,30 @@ public class CopyDictionary {
 
 	public static string Get(string key) {
 		if (!initialised) Init();
-		return copy[key];
+        
+        var value = "";
+        if (copy.TryGetValue(key, out value)) {
+            return value;
+        } else {
+            return KEYNOTFOUND;
+        }
 	}
 
-	public static void Get(string key, params string[] replace) {
+	public static string Get(string key, params string[] replace) {
 		if (!initialised) Init();
 
-		var str = copy[key];
-		for (var i = 0; i < replace.Length; i++) {
-			string stringReplace = "[" + i + "]";
+        var value = "";
+        if (copy.TryGetValue(key, out value)) {
+            var result = value;
+            for (var i = 0; i < replace.Length; i++) {
+                string stringToReplace = "[" + i + "]";
+                result = result.Replace(stringToReplace, replace[i]);
+            }
 
-		}
+            return result;
+        } else {
+            return KEYNOTFOUND;
+        }
 	}
 
 	private static void Init() {

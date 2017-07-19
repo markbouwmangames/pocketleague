@@ -41,7 +41,7 @@ public class SeasonSelector : MonoBehaviour {
 		newGO.SetActive(true);
 
 		var textfield = newGO.GetComponentInChildren<Text>();
-		textfield.text = "Season " + ((int)(season)).ToString();
+		textfield.text = CopyDictionary.Get("SEASONNAME", ((int)(season)).ToString());
 
 		return newGO.GetComponent<Button>();
 	}

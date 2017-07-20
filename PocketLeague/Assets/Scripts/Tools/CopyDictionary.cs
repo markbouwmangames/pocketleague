@@ -17,12 +17,16 @@ public class CopyDictionary {
 	private static Dictionary<string, string> copy;
 
 	public static void SetLanguage(Language language) {
+		SetLanguage(language, true);
+	}
+
+	private static void SetLanguage(Language language, bool update) {
 		currentLanguage = language;
 		PlayerPrefs.SetInt(KEYLOCATION, ((int)(language)));
 
 		string filePath = "Copy/" + language.ToString();
 		TextAsset targetFile = Resources.Load<TextAsset>(filePath);
-		var json =  targetFile.text;
+		var json = targetFile.text;
 		copy = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
 	}
 
@@ -66,6 +70,6 @@ public class CopyDictionary {
 		var languageKey = PlayerPrefs.GetInt(KEYLOCATION, 0);
 		var language = ((Language)(languageKey));
 
-		SetLanguage(language);
+		SetLanguage(language, false);
 	}
 }

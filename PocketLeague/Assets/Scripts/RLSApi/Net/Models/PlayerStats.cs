@@ -21,5 +21,19 @@ namespace RLSApi.Net.Models
 
         [JsonProperty("assists", Required = Required.Always)]
         public int Assists { get; set; }
-    }
+
+		[JsonIgnore]
+		public float ShotAccuracy {
+			get {
+				return UnityEngine.Mathf.Round(((float)(Goals) / (float)(Shots)) * 10000f) / 100f;
+			}
+		}
+
+		[JsonIgnore]
+		public float MvpPercentage {
+			get {
+				return UnityEngine.Mathf.Round(((float)(Mvps) / (float)(Wins)) * 10000f) / 100f;
+			}
+		}
+	}
 }

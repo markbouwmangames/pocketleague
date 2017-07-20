@@ -1,13 +1,19 @@
 {
+	"PS4" : "PS4",
+	"STEAM" : "Steam",
+	"XBOX" : "XBOX",
+
+	"MENU" : "Menu",
+	"REFRESH" : "Refresh",
 	"LASTUPDATE": "Last update: [0] at [1] GMT",
 
 	"SEASONNAME": "Season [0]",
-	"DUEL" : "1V1 SOLO DUEL",
-	"DOUBLES" : "2V2 DOUBLES",
-	"STANDARD" : "3V3 STANDARD",
-	"SOLOSTANDARD" : "3V3 SOLO STANDARD",
+	"DUEL" : "1v1 SOLO Duel",
+	"DOUBLES" : "2v2 Doubles",
+	"STANDARD" : "3v3 Standard",
+	"SOLOSTANDARD" : "3v3 Solo Standard",
 
-	"DIVISION" : "DIVISION [0]",
+	"DIVISION" : "Division [0]",
 	
 	"SEASON4UNRANKED" : "Unranked",
 	"SEASON4BRONZE1" : "Bronze I",
@@ -46,4 +52,13 @@
 	"SEASON2CHAMP1": "Champion",
 	"SEASON2CHAMP2": "Super Champion",
 	"SEASON2CHAMP3": "Grand Champion",
+	
+	"WINS" : "Wins",
+	"GOALS" : "Goals",
+	"SHOTS" : "Shots",
+	"SAVES" : "Saves",
+	"MVPS" : "MVPs",
+	"MVPPERCENTAGE" : "MVP Average",
+	"ASSISTS" : "Assists",
+	"SHOTACCURACY" : "Shot accuracy",
 }

@@ -10,6 +10,8 @@ public class RankDisplay : MonoBehaviour {
 
     private List<PlaylistRankDisplay> _playlistRankDisplays = new List<PlaylistRankDisplay>();
 
+	private SeasonData _selectedSeason;
+
     void Awake() {
         _playlistRankDisplayTemplate.gameObject.SetActive(false);
 
@@ -19,11 +21,14 @@ public class RankDisplay : MonoBehaviour {
         }
     }
 
-    public void Set(Dictionary<RlsPlaylistRanked, PlayerRank> seasonData) {
-        int index = 0;
+    public void Set(RlsSeason season, Dictionary<RlsPlaylistRanked, PlayerRank> seasonData) {
+		var path = "Data/Seasons/Season" + ((int)(season));
+		_selectedSeason = Resources.Load<SeasonData>(path);
+		
+		int index = 0;
         foreach (KeyValuePair<RlsPlaylistRanked, PlayerRank> kvp in seasonData) {
             var playlistRankDisplay = _playlistRankDisplays[index];
-            playlistRankDisplay.Set(kvp.Key, kvp.Value);
+            playlistRankDisplay.Set(_selectedSeason, kvp.Key, kvp.Value);
             index++;
         }
     }

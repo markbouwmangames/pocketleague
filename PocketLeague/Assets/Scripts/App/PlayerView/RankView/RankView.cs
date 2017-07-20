@@ -32,6 +32,6 @@ public class RankView : PlayerViewChild {
 
 	public void SetSeason(RlsSeason season) {
         var seasonData = _rankedSeasons[season];
-        _rankDisplay.Set(seasonData);
+        _rankDisplay.Set(season, seasonData);
     }
 }

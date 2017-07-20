@@ -26,6 +26,10 @@ public class CopyDictionary {
 		copy = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
 	}
 
+	public static Language GetLanguage() {
+		return currentLanguage;
+	}
+
 	public static string Get(string key) {
 		if (!initialised) Init();
         
@@ -33,6 +37,7 @@ public class CopyDictionary {
         if (copy.TryGetValue(key, out value)) {
             return value;
         } else {
+			Debug.LogWarning("Key not found: [" + key + "]");
             return KEYNOTFOUND;
         }
 	}
@@ -50,7 +55,8 @@ public class CopyDictionary {
 
             return result;
         } else {
-            return KEYNOTFOUND;
+			Debug.LogWarning("Key not found: [" + key + "]");
+			return KEYNOTFOUND;
         }
 	}
 

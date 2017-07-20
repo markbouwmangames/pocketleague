@@ -9,46 +9,96 @@ public class PlaylistRankDisplay : MonoBehaviour {
     [SerializeField]
     private Image icon;
     [SerializeField]
-    private Text rank;
+    private Text[] ranks;
     [SerializeField]
     private Text division;
     [SerializeField]
     private Text rating;
+
+	[SerializeField]
+	private GameObject withDivisionContainer;
+	[SerializeField]
+	private GameObject withoutDivisionContainer;
+
+	private SeasonData _currentSeason;
     
-    public void Set(RlsPlaylistRanked rlsPlaylistRanked, PlayerRank playerRank) {
-        title.text = rlsPlaylistRanked.ToString();
+    public void Set(SeasonData seasonData, RlsPlaylistRanked rlsPlaylistRanked, PlayerRank playerRank) {
+		_currentSeason = seasonData;
+		SetTitle(rlsPlaylistRanked);
+		SetRankText(playerRank);
+		SetRankIcon(playerRank);
+		SetDivisionText(playerRank);
+		SetRating(playerRank);
+	}
 
-        if (playerRank.Division != null) {
-            var div = playerRank.Division.Value;
-            division.text = "Division " + ToRoman(div);
-        }
+	private void SetTitle(RlsPlaylistRanked rlsPlaylistRanked) {
+		var titleKey = rlsPlaylistRanked.ToString().ToUpper();
+		title.text = CopyDictionary.Get(titleKey);
+	}
 
-        if (playerRank.Tier != null) {
-            rank.text = playerRank.Tier.Value.ToString();
-        }
+	private void SetRankText(PlayerRank playerRank) {
+		var key = _currentSeason.Ranks[0].NameKey;
+		if (playerRank.Tier != null) {
+			var index = playerRank.Tier.Value;
+			key = _currentSeason.Ranks[index].NameKey;
+		}
 
-        rating.text = playerRank.RankPoints.ToString();
-    }
+		var text = CopyDictionary.Get(key);
+		foreach (var rank in ranks) {
+			rank.text = text;
+		}
+	}
 
-    private string ToRoman(int number) {
-        Debug.Log(number);
+	private void SetRankIcon(PlayerRank playerRank) {
+		var sprite = _currentSeason.Ranks[0].Icon;
+		if (playerRank.Tier != null) {
+			var index = playerRank.Tier.Value;
+			sprite = _currentSeason.Ranks[index].Icon;
+		}
+		icon.sprite = sprite;
+	}
 
-        if (number == 1) {
+	private void SetDivisionText(PlayerRank playerRank) {
+		var text = "";
+		bool hasDivisions = false;
+
+		if (_currentSeason.HasDivisions) {
+			hasDivisions = true;
+			if (playerRank.Division != null) {
+				var index = playerRank.Tier.Value;
+				if (_currentSeason.Ranks[index].HasDivisions) {
+					var div = playerRank.Division.Value;
+					text = CopyDictionary.Get("DIVISION", ToRoman(div).ToString());
+				}
+			}
+		}
+
+		division.text = text;
+		withDivisionContainer.SetActive(hasDivisions);
+		withoutDivisionContainer.SetActive(!hasDivisions);
+	}
+
+	private void SetRating(PlayerRank playerRank) {
+		rating.text = playerRank.RankPoints.ToString();
+	}
+
+	private string ToRoman(int number) {
+        if (number == 0) {
             return "I";
         }
-        if (number == 2) {
+        if (number == 1) {
             return "II";
         }
-        if (number == 3) {
+        if (number == 2) {
             return "III";
         }
-        if (number == 4) {
+        if (number == 3) {
             return "IV";
         }
-        if (number == 5) {
+        if (number == 4) {
             return "V";
         }
 
-        return "";
+        return "N/A";
     }
 }

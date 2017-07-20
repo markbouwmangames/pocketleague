@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using RLSApi.Data;
+using System;
 
 public class SeasonSelector : MonoBehaviour {
+    public Action<RlsSeason> OnSeasonChanged;
+
 	[SerializeField]
 	private Button _buttonTemplate;
 	private Button[] _buttons;
@@ -29,7 +32,7 @@ public class SeasonSelector : MonoBehaviour {
 	}
 
 	private void OnButtonPress(RlsSeason season) {
-		Debug.Log(season);
+        if (OnSeasonChanged != null) OnSeasonChanged.Invoke(season);
 	}
 
 	private Button CreateButton(RlsSeason season) {

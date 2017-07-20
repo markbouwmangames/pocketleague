@@ -23,10 +23,6 @@ public class PlaystyleView : PlayerViewChild {
 		var savesPercentage = saves / total;
 		var assistPercentage = assists / total;
 
-		Debug.Log(goalPercentage);
-		Debug.Log(savesPercentage);
-		Debug.Log(assistPercentage);
-
 		goalsCircle.fillAmount = goalPercentage;
 
 		savesCircle.transform.localEulerAngles = new Vector3(0, 0, goalPercentage * -360f);

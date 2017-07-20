@@ -22,6 +22,20 @@ public class InfoView : PlayerViewChild {
 		string date = updateTimeD.Replace('/', '-');
 		string time = timeStrings[timeStrings.Length-1];
         CopyDictionary.SetLanguage(Language.EN);
-        _lastUpdatedAtTime.text = CopyDictionary.Get("LASTUPDATE", date, time); 
+        _lastUpdatedAtTime.text = CopyDictionary.Get("LASTUPDATE", date, time);
+
+		var resourceName = "";
+		var id = int.Parse(player.Platform.Id);
+
+		if(id == 1) {
+			resourceName = "Steam";
+		} else if(id == 2) {
+			resourceName = "PS4";
+		} else if(id == 3) {
+			resourceName = "XBOX";
+		}
+
+		var platform = Resources.Load<PlatformData>("Data/Platforms/" + resourceName);
+		_platformIcon.sprite = platform.Icon;
     }
 }

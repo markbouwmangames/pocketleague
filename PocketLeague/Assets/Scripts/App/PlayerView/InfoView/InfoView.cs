@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using RLSApi.Net.Models;
+using System.Collections;
+using UnityEngine.Networking;
 
 public class InfoView : PlayerViewChild {
 	[SerializeField]
@@ -11,6 +13,8 @@ public class InfoView : PlayerViewChild {
 	private Image _platformIcon;
 	[SerializeField]
 	private Image _avatarIcon;
+    [SerializeField]
+    private Sprite _defaultAvatar;
 
 	public override void Set(Player player) {
 		_playerName.text = player.DisplayName;
@@ -37,5 +41,18 @@ public class InfoView : PlayerViewChild {
 
 		var platform = Resources.Load<PlatformData>("Data/Platforms/" + resourceName);
 		_platformIcon.sprite = platform.Icon;
+
+        if (string.IsNullOrEmpty(player.Avatar)) {
+            _avatarIcon.sprite = _defaultAvatar;
+        } else {
+            _avatarIcon.sprite = _defaultAvatar;
+            StartCoroutine(LoadImageRoutine(player.Avatar));
+        }
+    }
+
+    private IEnumerator LoadImageRoutine(string url) {
+        UnityWebRequest www = UnityWebRequest.GetTexture(url);
+        yield return www.Send();
+        Texture myTexture = DownloadHandlerTexture.GetContent(www);
     }
 }

@@ -1,10 +1,21 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using Twitch.Net;
+using Twitch.Net.Models;
 using UnityEngine;
 namespace Twitch {
     public class TwitchClient {
-        public static void GetTrendingClips(string gameTitle, int limit, Action<string> onSuccess, Action<string> onFail) {
-            api.GetTrendingClips(gameTitle, limit, onSuccess, onFail);
+        /// <summary>
+        /// Initial values used for the API
+        /// </summary>
+        private static readonly string clientId = "fsbs0ur09zmbi3drjh9f4b8snelc17";
+        private static readonly bool debug = true;
+
+        public static void GetTrendingClips(string gameTitle, int limit, Action<Stream[]> onSuccess, Action<string> onFail) {
+            api.GetTrendingClips(gameTitle, limit, (data) => {
+                var streamData = JsonConvert.DeserializeObject<StreamData>(data);
+                if(onSuccess != null) onSuccess.Invoke(streamData.Streams);
+            }, onFail);
         }
 
         #region INTERNAL
@@ -18,6 +29,7 @@ namespace Twitch {
 
                     //add api
                     _twitchApiRequester = go.AddComponent<TwitchApiRequester>();
+                    _twitchApiRequester.Init(clientId, debug);
                 }
 
                 return _twitchApiRequester;

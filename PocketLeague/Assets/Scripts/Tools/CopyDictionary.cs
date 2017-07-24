@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using System;
 
 public enum Language {
 	EN = 0,
@@ -63,6 +64,15 @@ public class CopyDictionary {
 			return KEYNOTFOUND;
         }
 	}
+
+    public static void FormatTime(DateTimeOffset dateTime, out string date, out string time) {
+        string updateTimeS = dateTime.ToString("s");
+        string updateTimeD = dateTime.ToString("d");
+
+        var timeStrings = updateTimeS.Split('T');
+        date = updateTimeD.Replace('/', '-');
+        time = timeStrings[timeStrings.Length - 1];
+    }
 
 	private static void Init() {
 		initialised = true;

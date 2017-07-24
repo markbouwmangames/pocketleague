@@ -19,13 +19,8 @@ public class InfoView : PlayerViewChild {
 	public override void Set(Player player) {
 		_playerName.text = player.DisplayName;
 
-		string updateTimeS = player.UpdatedAt.ToString("s");
-		string updateTimeD = player.UpdatedAt.ToString("d");
-
-		var timeStrings = updateTimeS.Split('T');
-		string date = updateTimeD.Replace('/', '-');
-		string time = timeStrings[timeStrings.Length-1];
-        CopyDictionary.SetLanguage(Language.EN);
+        string date, time;
+        CopyDictionary.FormatTime(player.UpdatedAt, out date, out time);
         _lastUpdatedAtTime.text = CopyDictionary.Get("LASTUPDATE", date, time);
 
         var platform = PlatformTool.GetPlatform(player.Platform);

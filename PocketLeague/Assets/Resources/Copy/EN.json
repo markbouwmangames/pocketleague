@@ -6,12 +6,30 @@
 	"MENU" : "Menu",
 	"REFRESH" : "Refresh",
 	"LASTUPDATE": "Last update: [0] at [1] GMT",
+	
+	"RANKVIEWTITLE" : "Your rank [0]",
+	"PLAYLISTVIEWTITLE" : "Currently Online",
 
 	"SEASONNAME": "Season [0]",
-	"DUEL" : "1v1 SOLO Duel",
+	"DUEL" : "1v1 Solo Duel",
 	"DOUBLES" : "2v2 Doubles",
 	"STANDARD" : "3v3 Standard",
 	"SOLOSTANDARD" : "3v3 Solo Standard",
+	
+	"PLAYLIST_DUEL" : "Unranked 1v1 Solo Duel",
+	"PLAYLIST_DOUBLES" : "Unranked 2v2 Doubles",
+	"PLAYLIST_Standard" : "Unranked 3v3 Standard",
+	"PLAYLIST_CHAOS" : "Unranked 4v4 Chaos",
+	"PLAYLIST_RANKEDDUEL" : "Ranked 1v1 Solo Duel",
+	"PLAYLIST_RANKEDDOUBLES" : "Ranked 2v2 Doubles",
+	"PLAYLIST_RANKEDSOLOSTANDARD" : "Ranked 3v3 Solo Standard",
+	"PLAYLIST_RANKEDSTANDARD" : "Ranked 3v3 Standard",
+	"PLAYLIST_MUTATORMASHUP" : "Mutator Mashup",
+	"PLAYLIST_SNOWDAY" : "Snow Day",
+	"PLAYLIST_ROCKETLABS" : "Rocket Labs",
+	"PLAYLIST_HOOPS" : "Hoops",
+	"PLAYLIST_RUMBLE" : "Rumble",
+	"PLAYLIST_DROPSHOT" : "Dropshot",
 
 	"DIVISION" : "Division [0]",
 	

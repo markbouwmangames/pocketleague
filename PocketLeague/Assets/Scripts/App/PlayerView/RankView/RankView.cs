@@ -12,7 +12,9 @@ public class RankView : PlayerViewChild {
     private Dictionary<RlsSeason, Dictionary<RlsPlaylistRanked, PlayerRank>> _rankedSeasons;
 
     void Awake() {
-        _seasonSelector.OnSeasonChanged += OnSeasonChanged;
+        if (_seasonSelector != null) {
+            _seasonSelector.OnSeasonChanged += OnSeasonChanged;
+        }
     }
 
 	public override void Set(Player player) {
@@ -21,7 +23,10 @@ public class RankView : PlayerViewChild {
         var seasons = new RlsSeason[_rankedSeasons.Count];
         _rankedSeasons.Keys.CopyTo(seasons, 0);
 
-		_seasonSelector.SetSeasonButtons(seasons);
+        if (_seasonSelector != null) {
+            _seasonSelector.SetSeasonButtons(seasons);
+        }
+
         var latest = seasons[seasons.Length - 1];
         SetSeason(latest);
 	}

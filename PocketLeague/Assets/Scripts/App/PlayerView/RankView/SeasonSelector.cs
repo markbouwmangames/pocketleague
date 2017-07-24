@@ -36,16 +36,10 @@ public class SeasonSelector : MonoBehaviour {
 	}
 
 	private Button CreateButton(RlsSeason season) {
-		var newGO = GameObject.Instantiate(_buttonTemplate.gameObject);
-
-		newGO.transform.SetParent(_buttonTemplate.transform.parent);
-		newGO.transform.localScale = _buttonTemplate.transform.localScale;
-
-		newGO.SetActive(true);
-
-		var textfield = newGO.GetComponentInChildren<Text>();
+        var button = UITool.CreateField<Button>(_buttonTemplate);
+        var textfield = button.GetComponentInChildren<Text>();
 		textfield.text = CopyDictionary.Get("SEASONNAME", ((int)(season)).ToString());
 
-		return newGO.GetComponent<Button>();
+        return button;
 	}
 }

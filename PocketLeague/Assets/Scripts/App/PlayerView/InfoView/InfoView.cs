@@ -12,7 +12,7 @@ public class InfoView : PlayerViewChild {
 	[SerializeField]
 	private Image _platformIcon;
 	[SerializeField]
-	private Image _avatarIcon;
+	private RawImage _avatarIcon;
     [SerializeField]
     private Sprite _defaultAvatar;
 
@@ -28,24 +28,13 @@ public class InfoView : PlayerViewChild {
         CopyDictionary.SetLanguage(Language.EN);
         _lastUpdatedAtTime.text = CopyDictionary.Get("LASTUPDATE", date, time);
 
-		var resourceName = "";
-		var id = int.Parse(player.Platform.Id);
-
-		if(id == 1) {
-			resourceName = "Steam";
-		} else if(id == 2) {
-			resourceName = "PS4";
-		} else if(id == 3) {
-			resourceName = "XBOX";
-		}
-
-		var platform = Resources.Load<PlatformData>("Data/Platforms/" + resourceName);
+        var platform = PlatformTool.GetPlatform(player.Platform);
 		_platformIcon.sprite = platform.Icon;
 
         if (string.IsNullOrEmpty(player.Avatar)) {
-            _avatarIcon.sprite = _defaultAvatar;
+            _avatarIcon.texture = _defaultAvatar.texture;
         } else {
-            _avatarIcon.sprite = _defaultAvatar;
+            _avatarIcon.texture = _defaultAvatar.texture;
             StartCoroutine(LoadImageRoutine(player.Avatar));
         }
     }
@@ -53,6 +42,7 @@ public class InfoView : PlayerViewChild {
     private IEnumerator LoadImageRoutine(string url) {
         UnityWebRequest www = UnityWebRequest.GetTexture(url);
         yield return www.Send();
-        Texture myTexture = DownloadHandlerTexture.GetContent(www);
+        var texture = DownloadHandlerTexture.GetContent(www);
+        _avatarIcon.texture = texture;
     }
 }

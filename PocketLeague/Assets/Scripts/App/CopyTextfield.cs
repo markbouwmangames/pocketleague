@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Text))]
-public class CopyButton : MonoBehaviour {
+public class CopyTextfield : MonoBehaviour {
 	[SerializeField]
 	private string _key;
 

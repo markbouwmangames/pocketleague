@@ -15,7 +15,7 @@ public class RankDisplay : MonoBehaviour {
         _playlistRankDisplayTemplate.gameObject.SetActive(false);
 
         for(int i = 0; i < 4; i++) {
-            var prd = CreateField();
+            var prd = UITool.CreateField<PlaylistRankDisplay>(_playlistRankDisplayTemplate.gameObject);
             _playlistRankDisplays.Add(prd);
         }
     }
@@ -30,15 +30,5 @@ public class RankDisplay : MonoBehaviour {
             playlistRankDisplay.Set(_selectedSeason, kvp.Key, kvp.Value);
             index++;
         }
-    }
-
-    private PlaylistRankDisplay CreateField() {
-        var newGO = GameObject.Instantiate(_playlistRankDisplayTemplate.gameObject);
-
-        newGO.transform.SetParent(_playlistRankDisplayTemplate.transform.parent);
-        newGO.transform.localScale = _playlistRankDisplayTemplate.transform.localScale;
-
-        newGO.SetActive(true);
-        return newGO.GetComponent<PlaylistRankDisplay>();
     }
 }

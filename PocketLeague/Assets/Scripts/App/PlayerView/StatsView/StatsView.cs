@@ -14,7 +14,7 @@ public class StatsView : PlayerViewChild {
 		_statDisplayTemplate.gameObject.SetActive(false);
 
 		for (int i = 0; i < 8; i++) {
-			var statDisplay = CreateField();
+            var statDisplay = UITool.CreateField<StatDisplay>(_statDisplayTemplate);
 			_statDisplays.Add(statDisplay);
 		}
 	}
@@ -31,15 +31,5 @@ public class StatsView : PlayerViewChild {
 		_statDisplays[5].Set("SHOTACCURACY", stats.ShotAccuracy, "%");
 		_statDisplays[6].Set("MVPS", stats.Mvps);
 		_statDisplays[7].Set("MVPPERCENTAGE", stats.MvpPercentage);
-	}
-
-	private StatDisplay CreateField() {
-		var newGO = GameObject.Instantiate(_statDisplayTemplate.gameObject);
-
-		newGO.transform.SetParent(_statDisplayTemplate.transform.parent);
-		newGO.transform.localScale = _statDisplayTemplate.transform.localScale;
-
-		newGO.SetActive(true);
-		return newGO.GetComponent<StatDisplay>();
 	}
 }

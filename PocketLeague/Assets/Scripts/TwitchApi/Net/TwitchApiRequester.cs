@@ -31,15 +31,20 @@ namespace Twitch.Net {
             www.SetRequestHeader("Accept", "application/vnd.twitchtv.v5+json");
 
             //wait for response
-            if (_debug) Debug.Log("GET data from " + url);
+            if (_debug) Debug.Log("GET DATA from " + url);
             yield return www.Send();
 
-            if (!www.isError) {
-                if (_debug) Debug.Log("GOT data from " + url + ", data: " + www.downloadHandler.text);
+            if (!www.isError && www.responseCode >= 200 && www.responseCode <= 299) {
+                if (_debug) Debug.Log("GOT DATA from " + url + ", data: " + www.downloadHandler.text);
                 if (onSuccess != null) onSuccess.Invoke(www.downloadHandler.text);
             } else {
-                if (_debug) Debug.LogError("GOT error from " + url + ", error: " + www.error);
-                if (onFail != null) onFail.Invoke(www.error);
+                if (www.isError) {
+                    if (_debug) Debug.LogError("GOT WWW ERROR from " + url + ", error: " + www.error);
+                    onFail.Invoke(www.error);
+                } else {
+                    if (_debug) Debug.LogError("GOT SERVER ERROR from " + url + ", error: " + www.downloadHandler.text);
+                    onFail.Invoke(www.downloadHandler.text);
+                }
             }
         }
     }

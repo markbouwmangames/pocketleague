@@ -4,83 +4,151 @@ using System.Collections;
 using RLSApi.Net.Models;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace RLSApi {
-	public class RLSApiRequester : MonoBehaviour {
-		private string _url;
-		private string _authKey;
-		private bool _debug;
+    public class RLSApiRequester : MonoBehaviour {
+        private struct WWWRequestData {
+            public UnityWebRequest WWW;
+            public Action<string> OnSuccess;
+            public Action<Error> OnFail;
+        }
 
-		public void Init(string url, string authKey, bool debug) {
-			//set initial values passed by RLSClient
-			_url = url;
-			_authKey = authKey;
-			_debug = debug;
-		}
+        private string _url;
+        private string _authKey;
+        private bool _debug;
+        private bool _throttleRequests;
 
-		public void Get(string urlPosfix, Action<string> onSuccess, Action<Error> onFail) {
-			//start request routine
-			StartCoroutine(WebRequestRoutine(_url + urlPosfix, (data) => {
-				//on succes callback
-				onSuccess.Invoke(data);
-			}, (data) => {
-				//on fail callback
-                var result = new Error() { Message = data };
-				onFail.Invoke(result);
-			}));
-		}
+        private Queue<WWWRequestData> _requestQueue = new Queue<WWWRequestData>();
+        private int _rateLimitRemaining;
+        private DateTime _rateLimitResetRemaining;
 
-		public void Post(string urlPosfix, string postData, Action<string> onSuccess, Action<Error> onFail) {
-			//start post routine
-			StartCoroutine(WebPostRoutine(_url + urlPosfix, postData, (data) => {
-				//on succes callback
-				onSuccess.Invoke(data);
-			}, (data) => {
+        public void Init(string url, string authKey, bool debug, bool throttleRequests = true) {
+            //set initial values passed by RLSClient
+            _url = url;
+            _authKey = authKey;
+            _debug = debug;
+            _throttleRequests = throttleRequests;
+
+            //set standard rate limiter
+            _rateLimitRemaining = 2;
+            _rateLimitResetRemaining = DateTime.UtcNow.AddSeconds(1);
+
+            if (_throttleRequests) {
+                StartCoroutine(ThrottleRequests());
+            }
+        }
+
+        public void Get(string urlPosfix, Action<string> onSuccess, Action<Error> onFail) {
+            var www = GetRequestWWW(urlPosfix);
+
+            if (_throttleRequests) _requestQueue.Enqueue(new WWWRequestData(){
+                WWW = www,
+                OnSuccess = onSuccess,
+                OnFail = onFail
+            });
+            else DoWWW(www, onSuccess, onFail);
+        }
+
+        public void Post(string urlPosfix, string postData, Action<string> onSuccess, Action<Error> onFail) {
+            var www = GetPostWWW(urlPosfix, postData);
+
+            if (_throttleRequests) _requestQueue.Enqueue(new WWWRequestData() {
+                WWW = www,
+                OnSuccess = onSuccess,
+                OnFail = onFail
+            });
+            else DoWWW(www, onSuccess, onFail);
+        }
+
+        private void DoWWW(UnityWebRequest www, Action<string> onSuccess, Action<Error> onFail) {
+            //start request routine
+            StartCoroutine(WebRoutine(www, (data) => {
+                //on succes callback
+                onSuccess.Invoke(data);
+            }, (data) => {
                 //on fail callback
-                var result = new Error() { Message = data };
-				onFail.Invoke(result);
-			}));
-		}
+                onFail.Invoke(data);
+            }));
+        }
 
-		private IEnumerator WebRequestRoutine(string url, Action<string> onSuccess, Action<string> onFail) {
-			//create webrequest
-			UnityWebRequest www = UnityWebRequest.Get(url);
-			www.SetRequestHeader("Authorization", _authKey);
+        private UnityWebRequest GetRequestWWW(string postfix) {
+            var url = _url + postfix;
+            UnityWebRequest www = UnityWebRequest.Get(url);
+            www.SetRequestHeader("Authorization", _authKey);
+            return www;
+        }
 
-			//wait for response
-			if (_debug) Debug.Log("GET data from " + url);
-			yield return www.Send();
+        private UnityWebRequest GetPostWWW(string postfix, string postData) {
+            var url = _url + postfix;
+            var www = new UnityWebRequest(url, "POST");
+            byte[] bodyRaw = new System.Text.UTF8Encoding().GetBytes(postData);
+            www.uploadHandler = (UploadHandler)new UploadHandlerRaw(bodyRaw);
+            www.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("Authorization", _authKey);
+            return www;
+        }
 
-			if (!www.isError) {
-				if (_debug)	Debug.Log("GOT data from " + url + ", data: " + www.downloadHandler.text);
-				onSuccess.Invoke(www.downloadHandler.text);
-			} else { 
-				if (_debug) Debug.LogError("GOT error from " + url + ", error: " + www.error);
-				onFail.Invoke(www.error);
-			}
-		}
+        private IEnumerator ThrottleRequests() {
+            while (true) {
+                yield return null;
+                if (_rateLimitRemaining < 0) yield return null;
 
-		private IEnumerator WebPostRoutine(string url, string postData, Action<string> onSuccess, Action<string> onFail) {
-			//create webrequest
+                if (_rateLimitRemaining == 0) {
+                    var startTime = DateTime.UtcNow;
+                    var difference = _rateLimitResetRemaining - startTime;
 
-			var www = new UnityWebRequest(url, "POST");
-			byte[] bodyRaw = new System.Text.UTF8Encoding().GetBytes(postData);
-			www.uploadHandler = (UploadHandler)new UploadHandlerRaw(bodyRaw);
-			www.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
-			www.SetRequestHeader("Content-Type", "application/json");
-			www.SetRequestHeader("Authorization", _authKey);
+                    if (difference > TimeSpan.Zero) {
+                        yield return new WaitForSeconds((float)difference.TotalSeconds);
+                    }
+                }
 
-			//wait for response
-			if (_debug) Debug.Log("POST data to " + url + ", data: " + postData);
-			yield return www.Send();
+                if (_requestQueue.Count > 0) {
+                    var request = _requestQueue.Dequeue();
+                    yield return StartCoroutine(WebRoutine(request.WWW, request.OnSuccess, request.OnFail));
+                }
+            }
+        }
+        
+        private IEnumerator WebRoutine(UnityWebRequest www, Action<string> onSuccess, Action<Error> onFail) {
+            //wait for response
+            if (_debug) Debug.Log("GET DATA from " + www.url);
+            yield return www.Send();
 
-			if (!www.isError) {
-				if (_debug) Debug.Log("GOT data from " + url + ", data: " + www.downloadHandler.text);
-				onSuccess.Invoke(www.downloadHandler.text);
-			} else {
-				if (_debug) Debug.LogError("GOT error from " + url + ", error: " + www.error);
-				onFail.Invoke(www.error);
-			}
-		}
-	}
+            if (!www.isError && www.responseCode >= 200 && www.responseCode <= 299) {
+                //server returned data
+                if (_debug) Debug.Log("GOT DATA from " + www.url + ", data: " + www.downloadHandler.text);
+                onSuccess.Invoke(www.downloadHandler.text);
+            } else {
+                Error error = new Error();
+
+                if (www.isError) {
+                    //www request error
+                    if (_debug) Debug.LogError("GOT WWW REQUEST ERROR from " + www.url + ", error: " + www.error);
+                    error.StatusCode = www.responseCode;
+                    error.Message = www.error;
+                } else {
+                    //server returned error
+                    if (_debug) Debug.LogError("GOT SERVER ERROR from " + www.url + ", error: " + www.downloadHandler.text);
+                    error = JsonConvert.DeserializeObject<Error>(www.downloadHandler.text);
+                }
+
+                onFail.Invoke(error);
+            }
+
+            if (www.isError == false) {
+                var xRateLimitRemainingHeader = www.GetResponseHeader("x-rate-limit-remaining");
+                var xRateLimitResetRemainingHeader = www.GetResponseHeader("x-rate-limit-reset-remaining");
+
+                int rateLimitRemaining, rateLimitResetRemaining;
+                if (int.TryParse(xRateLimitRemainingHeader, out rateLimitRemaining)
+                    && int.TryParse(xRateLimitResetRemainingHeader, out rateLimitResetRemaining)) {
+                    _rateLimitRemaining = rateLimitRemaining;
+                    _rateLimitResetRemaining = DateTime.UtcNow.AddMilliseconds(rateLimitResetRemaining);
+                }
+            }
+        }
+    }
 }

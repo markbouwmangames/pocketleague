@@ -43,7 +43,7 @@ namespace RLSApi {
         public void Get(string urlPosfix, Action<string> onSuccess, Action<Error> onFail) {
             var www = GetRequestWWW(urlPosfix);
 
-            if (_throttleRequests) _requestQueue.Enqueue(new WWWRequestData(){
+            if (_throttleRequests) _requestQueue.Enqueue(new WWWRequestData() {
                 WWW = www,
                 OnSuccess = onSuccess,
                 OnFail = onFail
@@ -94,8 +94,7 @@ namespace RLSApi {
         private IEnumerator ThrottleRequests() {
             while (true) {
                 yield return null;
-                if (_rateLimitRemaining < 0) yield return null;
-
+                //wait until we're allowed to send requests again
                 if (_rateLimitRemaining == 0) {
                     var startTime = DateTime.UtcNow;
                     var difference = _rateLimitResetRemaining - startTime;
@@ -105,13 +104,18 @@ namespace RLSApi {
                     }
                 }
 
+                //send request
                 if (_requestQueue.Count > 0) {
                     var request = _requestQueue.Dequeue();
-                    yield return StartCoroutine(WebRoutine(request.WWW, request.OnSuccess, request.OnFail));
+                    yield return StartCoroutine(WebRoutine(request.WWW, request.OnSuccess, (data) => {
+                        //server too busy, retry
+                        if (data.StatusCode == 429) _requestQueue.Enqueue(request);
+                        else request.OnFail(data);
+                    }));
                 }
             }
         }
-        
+
         private IEnumerator WebRoutine(UnityWebRequest www, Action<string> onSuccess, Action<Error> onFail) {
             //wait for response
             if (_debug) Debug.Log("GET DATA from " + www.url);
@@ -138,16 +142,25 @@ namespace RLSApi {
                 onFail.Invoke(error);
             }
 
-            if (www.isError == false) {
-                var xRateLimitRemainingHeader = www.GetResponseHeader("x-rate-limit-remaining");
-                var xRateLimitResetRemainingHeader = www.GetResponseHeader("x-rate-limit-reset-remaining");
+            //check headers for rate limit
+            SetRateLimit(www);
+        }
 
-                int rateLimitRemaining, rateLimitResetRemaining;
-                if (int.TryParse(xRateLimitRemainingHeader, out rateLimitRemaining)
-                    && int.TryParse(xRateLimitResetRemainingHeader, out rateLimitResetRemaining)) {
-                    _rateLimitRemaining = rateLimitRemaining;
-                    _rateLimitResetRemaining = DateTime.UtcNow.AddMilliseconds(rateLimitResetRemaining);
-                }
+        private void SetRateLimit(UnityWebRequest www) {
+            if (www.isError) return;
+
+            //get headers
+            var xRateLimitRemainingHeader = www.GetResponseHeader("x-rate-limit-remaining");
+            var xRateLimitResetRemainingHeader = www.GetResponseHeader("x-rate-limit-reset-remaining");
+
+            //parse headers to rate limits
+            int rateLimitRemaining, rateLimitResetRemaining;
+            if (int.TryParse(xRateLimitRemainingHeader, out rateLimitRemaining)
+                && int.TryParse(xRateLimitResetRemainingHeader, out rateLimitResetRemaining)) {
+
+                //set rate limit and time till renewal
+                _rateLimitRemaining = rateLimitRemaining;
+                _rateLimitResetRemaining = DateTime.UtcNow.AddMilliseconds(rateLimitResetRemaining);
             }
         }
     }

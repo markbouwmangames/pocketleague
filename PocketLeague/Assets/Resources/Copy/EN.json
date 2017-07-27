@@ -1,4 +1,12 @@
 {
+	"TITLE" : "POCKET LEAGUE",
+	"INTROTEXT" : "Pocket League is the #1 Rocket League Stat Tracking app. Use it to track your own stats and those of your friends. Running out of people to play with? Use our matchmaking system to find you people to play with or against, based on your rank!",
+	"INTROCTABUTTON" : "LET'S GO",
+	"SKIP" : "skip",
+	"PLATFORMSELECT" : "First, we're going to set up your main account. For that, we need to know what platform you play on.",
+	"REASSURETEXT" : "Don't worry, you can always do this later.",
+	"ENTERUSERNAME" : "Now, enter your username!",
+
 	"PS4" : "PS4",
 	"STEAM" : "Steam",
 	"XBOX" : "XBOX",
@@ -7,9 +15,13 @@
 	"REFRESH" : "Refresh",
 	"LASTUPDATE": "Last update: [0] at [1] GMT",
 	
+	"SEARCH" : "Search",
+
 	"RANKVIEWTITLE" : "Your rank [0]",
 	"PLAYLISTVIEWTITLE" : "Currently Online",
 	"TWITCHTITLE" : "Currently on Twitch",
+
+	"INTROLEGAL" : "Psyonix and Rocket League are a Psyonix. Inc trademark.",
 
 	"SEASONNAME": "Season [0]",
 	"DUEL" : "1v1 Solo Duel",

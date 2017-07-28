@@ -77,7 +77,7 @@ namespace RLSApi {
 			var postfix = "player?unique_id=" + Uri.EscapeDataString(uniqueId) + "&platform_id=" + ((int)platform);
 			Get<Player>(postfix, onSuccess, onFail);
 		}
-
+		
 		public static void GetPlayers(IEnumerable<PlayerBatchRequest> players, Action<Player[]> onSuccess, Action<Error> onFail) {
 			int count = 0;
 			var enumerator = players.GetEnumerator();
@@ -101,6 +101,14 @@ namespace RLSApi {
 		public static void GetLeaderboardStats(RlsStatType statType, Action<Player[]> onSuccess, Action<Error> onFail) {
 			var postfix = "leaderboard/stat?type=" + statType.ToString().ToLower();
 			Get<Player[]>(postfix, onSuccess, onFail);
+		}
+
+		public static void SearchPlayer(string displayName, int page, Action<PlayerSearchPage> onSuccess, Action<Error> onFail) {
+			var postfix = "search/players?display_name=";
+			var postfix2 = "&page=";
+			var userName = Uri.EscapeDataString(displayName);
+			var totalPostfix = postfix + userName + postfix2 + page.ToString();
+			Get<PlayerSearchPage>(totalPostfix, onSuccess, onFail);
 		}
 
 		/// <summary>

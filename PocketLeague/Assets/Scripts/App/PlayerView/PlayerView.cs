@@ -3,12 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using RLSApi.Net.Models;
 using RLSApi;
+using System;
 
-public class PlayerView : MonoBehaviour {
-	void Awake() {
-		RLSClient.GetPlayer(RLSApi.Data.RlsPlatform.Ps4, "Mefoz", (player) => {
+public class PlayerView : BaseView {
+	/*void Awake() {
+	}*/
+
+	protected override void UpdateView() {
+		Loader.OnLoadStart();
+	}
+
+	public void Search(PlayerReferenceData playerReference) {
+		RLSClient.GetPlayer(playerReference.Platform, playerReference.DisplayName, (player) => {
+			//success
 			SetPlayer(player);
-		}, null);
+		}, (error) => {
+			//error
+		});
 	}
 
 	public void SetPlayer(Player player) {
@@ -17,5 +28,6 @@ public class PlayerView : MonoBehaviour {
 		foreach(var child in children) {
 			child.Set(player);
 		}
+		Loader.OnLoadEnd();
 	}
 }

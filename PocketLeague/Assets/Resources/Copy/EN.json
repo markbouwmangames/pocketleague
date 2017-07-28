@@ -11,9 +11,11 @@
 	"STEAM" : "Steam",
 	"XBOX" : "XBOX",
 
+	"HOME" : "Home",
 	"MENU" : "Menu",
 	"REFRESH" : "Refresh",
 	"LASTUPDATE": "Last update: [0] at [1] GMT",
+	"LOADING" : "Loading...",
 	
 	"SEARCH" : "Search",
 

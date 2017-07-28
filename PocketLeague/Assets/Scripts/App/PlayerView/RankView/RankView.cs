@@ -2,12 +2,15 @@
 using RLSApi.Net.Models;
 using RLSApi.Data;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class RankView : PlayerViewChild {
 	[SerializeField]
 	private SeasonSelector _seasonSelector;
     [SerializeField]
     private RankDisplay _rankDisplay;
+	[SerializeField]
+	private Text _rankviewTitle;
 
     private Dictionary<RlsSeason, Dictionary<RlsPlaylistRanked, PlayerRank>> _rankedSeasons;
 
@@ -29,6 +32,10 @@ public class RankView : PlayerViewChild {
 
         var latest = seasons[seasons.Length - 1];
         SetSeason(latest);
+
+		if (_rankviewTitle != null) {
+			_rankviewTitle.text = CopyDictionary.Get("RANKVIEWTITLE", player.DisplayName);
+		}
 	}
 
     private void OnSeasonChanged(RlsSeason value) {

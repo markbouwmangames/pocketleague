@@ -4,8 +4,9 @@ using RLSApi;
 using Twitch;
 using Twitch.Net.Models;
 using System.Collections.Generic;
+using System;
 
-public class HomeView : BaseView {
+public class HomeView : BaseUpdateView {
     [SerializeField]
     private RankView _rankView;
 
@@ -14,63 +15,86 @@ public class HomeView : BaseView {
 
     [SerializeField]
     private TwitchView _twitchView;
-	
+
+    private PlayerReferenceData _mainAccount;
 	private Dictionary<string, bool> _hasLoaded = new Dictionary<string, bool>();
 
-	protected override void Init() {
+    protected override void Init() {
+        _hasLoaded.Add("GetPlayer", false);
 		_hasLoaded.Add("GetPlaylists", false);
-		_hasLoaded.Add("GetPlayer", false);
 		_hasLoaded.Add("GetTrendingClips", false);
-
 		base.Init();
 	}
 
-	protected override void UpdateView() {
-		Loader.OnLoadStart();
+    protected override void UpdateView(Action onComplete = null) {
+        if (onComplete == null) Loader.OnLoadStart();
 
+        _hasLoaded["GetPlayer"] = false;
 		_hasLoaded["GetPlaylists"] = false;
-		_hasLoaded["GetPlayer"] = false;
 		_hasLoaded["GetTrendingClips"] = false;
 
-		RLSClient.GetPlaylists(UpdatePlaylists, null);
+        //load player data
+        RLSClient.GetPlayer(_mainAccount.Platform, _mainAccount.DisplayName, (player) => {
+            //succes
+            _hasLoaded["GetPlayer"] = true;
+            if (HasLoadedAll && onComplete != null) onComplete.Invoke();
+            else if (HasLoadedAll) Loader.OnLoadEnd();
 
-		TwitchClient.GetTrendingClips("Rocket%20League", 3, (streams) => {
-			UpdateStreams(streams);
-		}, null);
+            SetPlayer(player);
+        }, (error) => {
+            //error
+            Debug.LogWarning("TODO: IMPLEMENT ERROR HANDLING");
+        });
+
+        //load playlist data
+        RLSClient.GetPlaylists((data) => {
+            //success
+            _hasLoaded["GetPlaylists"] = true;
+            if (HasLoadedAll && onComplete != null) onComplete.Invoke();
+            else if (HasLoadedAll) Loader.OnLoadEnd();
+
+            UpdatePlaylists(data);
+        }, (error) => {
+            //error
+            Debug.LogWarning("TODO: IMPLEMENT ERROR HANDLING");
+        });
+
+        //load twitch videos
+        TwitchClient.GetTrendingClips("Rocket%20League", 3, (streams) => {
+            //success
+            _hasLoaded["GetTrendingClips"] = true;
+            if (HasLoadedAll && onComplete != null) onComplete.Invoke();
+            else if (HasLoadedAll) Loader.OnLoadEnd();
+
+            UpdateStreams(streams);
+        }, (error) => {
+            //error
+            Debug.LogWarning("TODO: IMPLEMENT ERROR HANDLING");
+        });
 	}
 
-	public void SetPlayer(PlayerReferenceData playerReference) {
-		RLSClient.GetPlayer(playerReference.Platform, playerReference.DisplayName, (player) => {
-			//succes
-			SetPlayer(player);
-		}, (error) => {
-			//error
-			Debug.LogWarning("TODO: IMPLEMENT ERROR HANDLING");
-		});
+	public void SetMainPlayer(PlayerReferenceData playerReference) {
+        _mainAccount = playerReference;
 	}
 
 	private void UpdatePlaylists(Playlist[] playlists) {
-		_hasLoaded["GetPlaylists"] = true;
+        _hasLoaded["GetPlaylists"] = true;
 		_playlistView.Set(playlists);
-		if (HasLoadedAll) Loader.OnLoadEnd();
 	}
 
     private void UpdateStreams(Stream[] streams) {
-		_hasLoaded["GetTrendingClips"] = true;
+        _hasLoaded["GetTrendingClips"] = true;
 		_twitchView.Set(streams);
-		if (HasLoadedAll) Loader.OnLoadEnd();
 	}
 
     public void SetPlayer(Player player) {
-		_hasLoaded["GetPlayer"] = true;
+        _hasLoaded["GetPlayer"] = true;
 		_rankView.Set(player);
-		if (HasLoadedAll) Loader.OnLoadEnd();
     }
 
 	private bool HasLoadedAll {
 		get {
 			foreach(var kvp in _hasLoaded) {
-				Debug.Log(kvp.Key + ", " + kvp.Value);
 				if (kvp.Value == false) return false;
 			}
 

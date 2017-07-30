@@ -7,12 +7,15 @@
 	"REASSURETEXT" : "Don't worry, you can always do this later.",
 	"ENTERUSERNAME" : "Now, enter your username!",
 
+	"USERNAMEPLACEHOLDER" : "Enter username...",
+
 	"PS4" : "PS4",
 	"STEAM" : "Steam",
 	"XBOX" : "XBOX",
 
 	"HOME" : "Home",
-	"MENU" : "Menu",
+	"TRACKEDACCOUNTS" : "Tracked accounts",
+	"OPTIONS" : "Options",
 	"REFRESH" : "Refresh",
 	"LASTUPDATE": "Last update: [0] at [1] GMT",
 	"LOADING" : "Loading...",

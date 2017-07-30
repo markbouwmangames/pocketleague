@@ -2,6 +2,7 @@
 
 public abstract class BaseView : MonoBehaviour {
 	private CanvasGroup _canvasGroup;
+    protected bool isOpen;
 
 	void Awake() {
 		Init();
@@ -10,15 +11,25 @@ public abstract class BaseView : MonoBehaviour {
 	}
 
 	public void SetEnabled(bool value) {
+        isOpen = value;
+
 		_canvasGroup.alpha = value ? 1 : 0;
 		_canvasGroup.blocksRaycasts = value;
 		_canvasGroup.interactable = value;
 
-		if (value) UpdateView();
+        if (value) OpenView();
+        else CloseView();
 	}
 
 	protected virtual void Init() {
 
 	}
-	protected abstract void UpdateView();
+
+    protected virtual void OpenView() {
+
+    }
+
+    protected virtual void CloseView() {
+
+    }
 }

@@ -18,6 +18,8 @@ public class PlatformSelector : MonoBehaviour {
     public void Set(RlsPlatform[] rlsPlatforms) {
         for (int i = 0; i < rlsPlatforms.Length; i++) {
             var platform = rlsPlatforms[i];
+            if (platformStatus.ContainsKey(platform)) continue;
+
             var toggle = UITool.CreateField<Toggle>(_toggleTemplate);
 
             var iconTransform = toggle.transform.FindChild("Icon");

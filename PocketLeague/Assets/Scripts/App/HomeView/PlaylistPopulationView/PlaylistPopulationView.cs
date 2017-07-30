@@ -43,6 +43,7 @@ public class PlaylistPopulationView : MonoBehaviour {
     }
 
     private void SetupDisplays(List<RlsPlaylist> rlsPlaylistIds) {
+        if (_displays != null) return;
         var num = rlsPlaylistIds.Count;
         _displays = new PlaylistPopulationDisplay[num];
 

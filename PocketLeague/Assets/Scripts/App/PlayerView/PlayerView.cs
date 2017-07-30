@@ -5,11 +5,8 @@ using RLSApi.Net.Models;
 using RLSApi;
 using System;
 
-public class PlayerView : BaseView {
-	/*void Awake() {
-	}*/
-
-	protected override void UpdateView() {
+public class PlayerView : BaseUpdateView {
+	protected override void UpdateView(Action OnComplete = null) {
 		Loader.OnLoadStart();
 	}
 

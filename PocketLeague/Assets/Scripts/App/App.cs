@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class App : MonoBehaviour {
-	[SerializeField]
-	private HomeView _homeView;
+    [SerializeField]
+    private HomeView _homeView;
+    [SerializeField]
+    private TrackedAccountsView _trackedAccountsView;
+    [SerializeField]
+    private OptionsView _optionsView;
 	[SerializeField]
 	private PlayerView _playerView;
 
@@ -17,13 +21,23 @@ public class App : MonoBehaviour {
 			DisplayName = "Mefoz"
 		};
 
-		GoHome();
+        _homeView.SetMainPlayer(_mainAccount);
+		SetHomeView();
 	}
 
-	public void GoHome() {
+	public void SetHomeView() {
 		SetView(_homeView);
-		_homeView.SetPlayer(_mainAccount);
 	}
+
+    public void SetTrackedAccountsView() {
+        SetView(_trackedAccountsView);
+    }
+
+    public void SetOptionsView() {
+      //  SetView(_optionsView);
+        SetView(_playerView);
+        _playerView.Search(_mainAccount);
+    }
 
 	private void SetView(BaseView view) {
 		if (_currentActive != null) {

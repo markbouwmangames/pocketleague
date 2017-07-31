@@ -8,7 +8,7 @@ using System;
 
 public class HomeView : BaseUpdateView {
     [SerializeField]
-    private RankView _rankView;
+    private PlayerQuickView _playerQuickView;
 
     [SerializeField]
     private PlaylistPopulationView _playlistView;
@@ -24,9 +24,8 @@ public class HomeView : BaseUpdateView {
 		_hasLoaded.Add("GetPlaylists", false);
 		_hasLoaded.Add("GetTrendingClips", false);
 
-        _rankView.OnClick += () => {
+        _playerQuickView.OnClick += () => {
             var app = FindObjectOfType<App>();
-            Debug.Log("Main account: " + _mainAccount.DisplayName);
             app.SetPlayerView(_mainAccount);
         };
 
@@ -85,18 +84,15 @@ public class HomeView : BaseUpdateView {
 	}
 
 	private void UpdatePlaylists(Playlist[] playlists) {
-        _hasLoaded["GetPlaylists"] = true;
 		_playlistView.Set(playlists);
 	}
 
     private void UpdateStreams(Stream[] streams) {
-        _hasLoaded["GetTrendingClips"] = true;
 		_twitchView.Set(streams);
 	}
 
     public void SetPlayer(Player player) {
-        _hasLoaded["GetPlayer"] = true;
-		_rankView.Set(player);
+		_playerQuickView.Set(player);
     }
 
 	private bool HasLoadedAll {

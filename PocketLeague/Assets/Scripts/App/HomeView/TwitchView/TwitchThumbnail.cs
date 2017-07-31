@@ -15,6 +15,7 @@ public class TwitchThumbnail : MonoBehaviour {
     [SerializeField]
     private Text _followers;
 
+	private string _currentUrl;
 
 
     public void Set(Stream stream) {
@@ -23,9 +24,12 @@ public class TwitchThumbnail : MonoBehaviour {
         _followers.text = stream.Channel.Followers.ToString();
 
         var previewUrl = stream.Preview.Template;
-        StartCoroutine(LoadThumbnailRoutine(previewUrl, 300, 200));
-
-        var button = GetComponent<Button>();
+		if (_currentUrl != previewUrl) {
+			StartCoroutine(LoadThumbnailRoutine(previewUrl, 300, 200));
+			_currentUrl = previewUrl;
+		}
+		
+		var button = GetComponent<Button>();
         button.onClick.AddListener(() => {
             TwitchClient.OpenURL(stream.Channel.StreamName);
         });

@@ -13,7 +13,7 @@ namespace RLSApi {
 		/// </summary>
 		private static readonly string url = "https://api.rocketleaguestats.com/v1/";
 		private static readonly string authKey = "ZXT5OU2S4B53F0GQ3UZHL7620K1MBV9G";
-		private static readonly bool debug = true;
+		private static readonly bool debug = false;
 
 		/// <summary>
 		/// Returns all tiers from the current season

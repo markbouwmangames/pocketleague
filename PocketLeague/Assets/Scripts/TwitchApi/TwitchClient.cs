@@ -10,8 +10,9 @@ namespace Twitch {
         /// Initial values used for the API
         /// </summary>
         private static readonly string clientId = "fsbs0ur09zmbi3drjh9f4b8snelc17";
-        private static readonly bool debug = false;
-        
+		private static readonly bool debug = false;
+		private static readonly bool throttleRequests = true;
+
 #if UNITY_IOS
         [DllImport("__Internal")]
         private static extern bool hasTwitch();
@@ -32,8 +33,8 @@ namespace Twitch {
                 return false;
             return true;
         }
-#else 
-        private static bool hasTwitch() {
+#else
+		private static bool hasTwitch() {
             return false;
         }
 #endif
@@ -66,7 +67,7 @@ namespace Twitch {
 
                     //add api
                     _twitchApiRequester = go.AddComponent<TwitchApiRequester>();
-                    _twitchApiRequester.Init(clientId, debug);
+                    _twitchApiRequester.Init(clientId, debug, throttleRequests);
                 }
 
                 return _twitchApiRequester;

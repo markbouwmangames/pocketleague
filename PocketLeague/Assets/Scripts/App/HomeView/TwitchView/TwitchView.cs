@@ -8,43 +8,28 @@ public class TwitchView : MonoBehaviour {
     private TwitchThumbnail _thumbnailTemplate;
 
     private List<TwitchThumbnail> _thumbnails = new List<TwitchThumbnail>();
-    private List<string> _currentStreams = new List<string>();
 
     void Awake() {
         _thumbnailTemplate.gameObject.SetActive(false);
+
+		for(var i = 0; i < 3; i++) {
+			var thumbnail = UITool.CreateField<TwitchThumbnail>(_thumbnailTemplate);
+			_thumbnails.Add(thumbnail);
+		}
     }
 
     public void Set(Stream[] streams) {
-        CreateThumbnails(streams);
-    }
+		for(var i = 0; i < _thumbnails.Count; i++) {
+			var thumbnail = _thumbnails[i];
+			thumbnail.gameObject.SetActive(i < streams.Length);
+			if (i >= streams.Length) continue;
 
-    private void CreateThumbnails(Stream[] streams) {
-        bool shouldUpdate = false;
-        foreach (var stream in streams) {
-            if (_currentStreams.Contains(stream.Channel.URL) == false) {
-                shouldUpdate = true;
-                break;
-            }
-        }
+			var stream = streams[i];
+			thumbnail.Set(stream);
+		}
 
-        if (!shouldUpdate) return;
-
-        if (_thumbnails != null) {
-            foreach (var thumbnail in _thumbnails) {
-                Destroy(thumbnail.gameObject);
-            }
-            _thumbnails.Clear();
-        }
-
-        foreach (var stream in streams) {
-            var thumbnail = UITool.CreateField<TwitchThumbnail>(_thumbnailTemplate);
-            thumbnail.Set(stream);
-            _thumbnails.Add(thumbnail);
-            _currentStreams.Add(stream.Channel.URL);
-        }
-
-        SetHeight(streams.Length);
-    }
+		SetHeight(streams.Length);
+	}
 
     private void SetHeight(int numStreams) {
         var thumbnailHeight = 200;

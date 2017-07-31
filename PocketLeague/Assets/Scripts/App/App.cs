@@ -38,11 +38,13 @@ public class App : MonoBehaviour {
     }
 
     public void SetPlayerView(PlayerReferenceData playerReference) {
-        SetView(_playerView);
-        _playerView.SetPlayer(playerReference);
+		_playerView.SetPlayer(playerReference);
+		SetView(_playerView);
     }
 
 	private void SetView(BaseView view) {
+		if (view == _currentActive) return;
+
 		if (_currentActive != null) {
 			_currentActive.SetEnabled(false);
 		}

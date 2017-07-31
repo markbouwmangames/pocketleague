@@ -5,10 +5,9 @@ using RLSApi.Net.Models;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace RLSApi {
-    public class RLSApiRequester : MonoBehaviour {
+	public class RLSApiRequester : MonoBehaviour {
         private struct WWWRequestData {
             public UnityWebRequest WWW;
             public Action<string> OnSuccess;
@@ -130,12 +129,12 @@ namespace RLSApi {
 
                 if (www.isError) {
                     //www request error
-                    if (_debug) Debug.LogError("GOT WWW REQUEST ERROR from " + www.url + ", error: " + www.error);
+                    Debug.LogError("GOT WWW REQUEST ERROR from " + www.url + ", error: " + www.error);
                     error.StatusCode = www.responseCode;
                     error.Message = www.error;
                 } else {
                     //server returned error
-                    if (_debug) Debug.LogError("GOT SERVER ERROR from " + www.url + ", error: " + www.downloadHandler.text);
+                   Debug.LogError("GOT SERVER ERROR from " + www.url + ", error: " + www.downloadHandler.text);
                     error = JsonConvert.DeserializeObject<Error>(www.downloadHandler.text);
                 }
 

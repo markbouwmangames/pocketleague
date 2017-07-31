@@ -39,7 +39,7 @@ public class PlaylistPopulationView : MonoBehaviour {
 
         SetupDisplays(_rlsPlaylistIds);
         SetHeight(_rlsPlaylistIds.Count);
-        _platformSelector.Set(_platforms.ToArray());
+		_platformSelector.UpdatePlatforms(_platforms.ToArray());
     }
 
     private void SetupDisplays(List<RlsPlaylist> rlsPlaylistIds) {

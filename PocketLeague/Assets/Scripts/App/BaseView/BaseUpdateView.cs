@@ -38,9 +38,7 @@ public abstract class BaseUpdateView : BaseView {
         }
 
         if (_loading) {
-            _scrollRect.verticalNormalizedPosition = Mathf.Clamp01(normalizedPosition);
-        } else {
-            if (normalizedPosition < 0) _scrollRect.verticalNormalizedPosition = 0;
+			if (normalizedPosition > 1f) _scrollRect.verticalNormalizedPosition = 1f;
         }
     }
 

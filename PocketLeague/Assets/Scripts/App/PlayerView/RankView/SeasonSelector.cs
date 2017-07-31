@@ -2,32 +2,42 @@
 using UnityEngine.UI;
 using RLSApi.Data;
 using System;
+using System.Collections.Generic;
 
 public class SeasonSelector : MonoBehaviour {
     public Action<RlsSeason> OnSeasonChanged;
 
 	[SerializeField]
 	private Button _buttonTemplate;
-	private Button[] _buttons;
+	private Dictionary<RlsSeason, Button> _buttons = new Dictionary<RlsSeason, Button>();
 
 
 	void Awake() {
 		_buttonTemplate.gameObject.SetActive(false);
+
+		var rlsPlatforms = Enum.GetValues(typeof(RlsSeason));
+		CreateSeasonButtons(rlsPlatforms);
 	}
 
-	public void SetSeasonButtons(RlsSeason[] seasons) {
-		_buttons = new Button[seasons.Length];
-
+	private void CreateSeasonButtons(Array seasons) {
 		var i = seasons.Length;
-		while(--i > -1) {
-			var season = seasons[i];
+		while (--i > -1) {
+			var season = (RlsSeason)(seasons.GetValue(i));
 
 			var button = CreateButton(season);
-			_buttons[i] = button;
 
 			button.onClick.AddListener(() => {
 				OnButtonPress(season);
 			});
+
+			_buttons.Add(season, button);
+		}
+	}
+
+	public void SetSeasonButtons(RlsSeason[] seasons) {
+		var seasonList = new List<RlsSeason>(seasons);
+		foreach(var kvp in _buttons) {
+			kvp.Value.gameObject.SetActive(seasonList.Contains(kvp.Key));
 		}
 	}
 

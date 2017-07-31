@@ -34,9 +34,12 @@ public class App : MonoBehaviour {
     }
 
     public void SetOptionsView() {
-      //  SetView(_optionsView);
+      SetView(_optionsView);
+    }
+
+    public void SetPlayerView(PlayerReferenceData playerReference) {
         SetView(_playerView);
-        _playerView.Search(_mainAccount);
+        _playerView.SetPlayer(playerReference);
     }
 
 	private void SetView(BaseView view) {

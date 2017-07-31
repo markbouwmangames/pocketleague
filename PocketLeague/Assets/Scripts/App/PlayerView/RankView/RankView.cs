@@ -3,14 +3,19 @@ using RLSApi.Net.Models;
 using RLSApi.Data;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System;
 
 public class RankView : PlayerViewChild {
+    public Action OnClick;
+
 	[SerializeField]
 	private SeasonSelector _seasonSelector;
     [SerializeField]
     private RankDisplay _rankDisplay;
 	[SerializeField]
 	private Text _rankviewTitle;
+    [SerializeField]
+    private Button _button;
 
     private Dictionary<RlsSeason, Dictionary<RlsPlaylistRanked, PlayerRank>> _rankedSeasons;
 
@@ -18,6 +23,14 @@ public class RankView : PlayerViewChild {
         if (_seasonSelector != null) {
             _seasonSelector.OnSeasonChanged += OnSeasonChanged;
         }
+
+        if (_button != null) {
+            _button.onClick.AddListener(OnButtonClick);
+        }
+    }
+
+    private void OnButtonClick() {
+        if (OnClick != null) OnClick.Invoke();
     }
 
 	public override void Set(Player player) {

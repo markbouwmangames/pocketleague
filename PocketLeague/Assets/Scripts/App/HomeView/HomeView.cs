@@ -23,6 +23,13 @@ public class HomeView : BaseUpdateView {
         _hasLoaded.Add("GetPlayer", false);
 		_hasLoaded.Add("GetPlaylists", false);
 		_hasLoaded.Add("GetTrendingClips", false);
+
+        _rankView.OnClick += () => {
+            var app = FindObjectOfType<App>();
+            Debug.Log("Main account: " + _mainAccount.DisplayName);
+            app.SetPlayerView(_mainAccount);
+        };
+
 		base.Init();
 	}
 

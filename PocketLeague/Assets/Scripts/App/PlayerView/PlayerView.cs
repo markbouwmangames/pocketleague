@@ -6,18 +6,29 @@ using RLSApi;
 using System;
 
 public class PlayerView : BaseUpdateView {
-	protected override void UpdateView(Action OnComplete = null) {
-		Loader.OnLoadStart();
+    private PlayerReferenceData _currentPlayer;
+
+    protected override void UpdateView(Action onComplete = null) {
+        if (onComplete == null) Loader.OnLoadStart();
+
+        GetPlayerData(_currentPlayer, (player) => {
+            //success
+            SetPlayer(player);
+            if (onComplete != null) onComplete.Invoke();
+            else Loader.OnLoadEnd();
+        }, (error) => {
+            //fail
+            Debug.LogWarning("TODO: ERROR HANDLING");
+        });
 	}
 
-	public void Search(PlayerReferenceData playerReference) {
-		RLSClient.GetPlayer(playerReference.Platform, playerReference.DisplayName, (player) => {
-			//success
-			SetPlayer(player);
-		}, (error) => {
-			//error
-		});
+    public void SetPlayer(PlayerReferenceData playerReference) {
+        _currentPlayer = playerReference;
 	}
+
+    private void GetPlayerData(PlayerReferenceData playerReference, Action<Player> onSuccess, Action<Error> onFail) {
+        RLSClient.GetPlayer(playerReference.Platform, playerReference.DisplayName, onSuccess, onFail);
+    }
 
 	public void SetPlayer(Player player) {
 		var children = GetComponentsInChildren<PlayerViewChild>();
@@ -25,6 +36,5 @@ public class PlayerView : BaseUpdateView {
 		foreach(var child in children) {
 			child.Set(player);
 		}
-		Loader.OnLoadEnd();
 	}
 }

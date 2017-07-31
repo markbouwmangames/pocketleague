@@ -31,8 +31,13 @@ public class PlayerView : BaseUpdateView {
     }
 
 	public void SetPlayer(Player player) {
-		var children = GetComponentsInChildren<PlayerViewChild>();
+		var database = FindObjectOfType<PlayerDatabase>();
+		if (database.ContainsPlayer(_currentPlayer)) {
+			database.UpdatePlayer(_currentPlayer, player);
+		}
 
+
+		var children = GetComponentsInChildren<PlayerViewChild>();
 		foreach(var child in children) {
 			child.Set(player);
 		}

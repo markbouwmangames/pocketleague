@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class UITool : MonoBehaviour {
 
+	public static GameObject CreateField(GameObject original) {
+		return CreateField<GameObject>(original);
+	}
+
     public static T CreateField<T>(T original) where T : MonoBehaviour {
         return CreateField<T>(original.gameObject);
     }

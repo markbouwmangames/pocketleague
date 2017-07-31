@@ -8,10 +8,13 @@ public class PlaylistPopulationView : MonoBehaviour {
     [SerializeField]
     private PlatformSelector _platformSelector;
 
-    [SerializeField]
-    private PlaylistPopulationDisplay _playlistPopulationDisplayTemplate;
+	[SerializeField]
+	private PlaylistPopulationDisplay _playlistPopulationDisplayTemplate;
 
-    private PlaylistPopulationDisplay[] _displays;
+	[SerializeField]
+	private List<RlsPlaylist> _hiddenPlaylists;
+
+	private PlaylistPopulationDisplay[] _displays;
 
     private Playlist[] _playlists;
     private List<RlsPlatform> _platforms;
@@ -44,7 +47,8 @@ public class PlaylistPopulationView : MonoBehaviour {
 
     private void SetupDisplays(List<RlsPlaylist> rlsPlaylistIds) {
         if (_displays != null) return;
-        var num = rlsPlaylistIds.Count;
+		
+        var num = rlsPlaylistIds.Count - _hiddenPlaylists.Count;
         _displays = new PlaylistPopulationDisplay[num];
 
         for (var i = 0; i < num; i++) {
@@ -79,10 +83,13 @@ public class PlaylistPopulationView : MonoBehaviour {
             totalPopulation += GetPopulation(playlist, selectedPlatforms.ToArray());
         }
 
+		int index = 0;
         for (var i = 0; i < _rlsPlaylistIds.Count; i++) {
             var playlist = _rlsPlaylistIds[i];
             var population = GetPopulation(playlist, selectedPlatforms.ToArray());
-            _displays[i].Set(playlist, population, totalPopulation);
+
+			if (_hiddenPlaylists.Contains(playlist)) continue;
+            _displays[index++].Set(playlist, population, totalPopulation);
         }
     }
 

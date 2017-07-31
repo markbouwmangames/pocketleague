@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class App : MonoBehaviour {
     [SerializeField]
@@ -15,12 +13,17 @@ public class App : MonoBehaviour {
 	private BaseView _currentActive;
 	private PlayerReferenceData _mainAccount;
 
-	void Start() {
+	void Awake() {
+		gameObject.AddComponent<PlayerDatabase>();
+
 		_mainAccount = new PlayerReferenceData() {
 			Platform = RLSApi.Data.RlsPlatform.Ps4,
 			DisplayName = "Mefoz"
 		};
+	}
 
+
+	void Start() {
         _homeView.SetMainPlayer(_mainAccount);
 		SetHomeView();
 	}

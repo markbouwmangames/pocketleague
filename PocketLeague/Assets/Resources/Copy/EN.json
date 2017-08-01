@@ -1,40 +1,41 @@
 {
 	"TITLE" : "POCKET LEAGUE",
+	
 	"INTROTEXT" : "Pocket League is the #1 Rocket League Stat Tracking app. Use it to track your own stats and those of your friends. Running out of people to play with? Use our matchmaking system to find you people to play with or against, based on your rank!",
 	"INTROCTABUTTON" : "LET'S GO",
 	"SKIP" : "skip",
+	"INTROLEGAL" : "Psyonix and Rocket League are a Psyonix. Inc trademark.",
 	"PLATFORMSELECT" : "First, we're going to set up your main account. For that, we need to know what platform you play on.",
 	"REASSURETEXT" : "Don't worry, you can always do this later.",
 	"ENTERUSERNAME" : "Now, enter your username!",
-
-	"USERNAMEPLACEHOLDER" : "Enter username...",
-	"ADDPLAYERSMESSAGE" : "Oops! It looks like you haven't put any players on your shortlist yet. Press the + icon when viewing a player to add them to this list.",
-
+	
 	"PS4" : "PS4",
 	"STEAM" : "Steam",
 	"XBOX" : "XBOX",
+	
+	"USERNAMEPLACEHOLDER" : "Enter username...",
+	"ADDPLAYERSMESSAGE" : "Oops! It looks like you haven't put any players on your shortlist yet. Press the + icon when viewing a player to add them to this list.",
+	"LOADING" : "Loading...",
+	"LASTUPDATE": "Last update: [0] at [1] GMT",
 
 	"HOME" : "Home",
-	"TRACKEDACCOUNTS" : "Tracked accounts",
+	"TRACKEDACCOUNTS" : "Tracked Accounts",
 	"OPTIONS" : "Options",
-	"REFRESH" : "Refresh",
-	"LASTUPDATE": "Last update: [0] at [1] GMT",
-	"LOADING" : "Loading...",
-	
-	"SEARCH" : "Search",
+	"LEADERBOARDS" : "Leaderboards",
 
-	"RANKVIEWTITLE" : "Your rank [0]",
+	"RANKVIEWTITLE" : "[0]",
 	"PLAYLISTVIEWTITLE" : "Currently Online",
 	"TWITCHTITLE" : "Currently on Twitch",
-
-	"INTROLEGAL" : "Psyonix and Rocket League are a Psyonix. Inc trademark.",
-
+	
 	"SEASONNAME": "Season [0]",
 	"DUEL" : "1v1 Solo Duel",
 	"DOUBLES" : "2v2 Doubles",
 	"STANDARD" : "3v3 Standard",
-	"SOLOSTANDARD" : "3v3 Solo Standard",
+	"SOLOSTANDARD" : "3v3 Solo Standard",	
 	
+	"RANKED" : "Ranked",
+	"UNRANKED" : "Unranked",
+
 	"PLAYLIST_DUEL" : "Unranked 1v1 Solo Duel",
 	"PLAYLIST_DOUBLES" : "Unranked 2v2 Doubles",
 	"PLAYLIST_Standard" : "Unranked 3v3 Standard",
@@ -49,9 +50,26 @@
 	"PLAYLIST_HOOPS" : "Hoops",
 	"PLAYLIST_RUMBLE" : "Rumble",
 	"PLAYLIST_DROPSHOT" : "Dropshot",
-
+	
 	"DIVISION" : "Division [0]",
 	
+	"SEASON2UNRANKED": "Unranked",
+	"SEASON2PROSPECT1": "Prospect I",
+	"SEASON2PROSPECT2": "Prospect II",
+	"SEASON2PROSPECT3": "Prospect III",
+	"SEASON2PROSPECT4": "Prospect Elite",
+	"SEASON2CHALLENGER1": "Challenger I",
+	"SEASON2CHALLENGER2": "Challenger II",
+	"SEASON2CHALLENGER3": "Challenger III",
+	"SEASON2CHALLENGER4": "Challenger Elite",
+	"SEASON2STAR1": "Rising Star",
+	"SEASON2STAR2": "Shooting Star",
+	"SEASON2STAR3": "All-Star",
+	"SEASON2STAR4": "SuperStar",
+	"SEASON2CHAMP1": "Champion",
+	"SEASON2CHAMP2": "Super Champion",
+	"SEASON2CHAMP3": "Grand Champion",
+
 	"SEASON4UNRANKED" : "Unranked",
 	"SEASON4BRONZE1" : "Bronze I",
 	"SEASON4BRONZE2" : "Bronze II",
@@ -72,23 +90,6 @@
 	"SEASON4CHAMPION2" : "Champion II",
 	"SEASON4CHAMPION3" : "Champion III",
 	"SEASON4GRANDCHAMPION" : "Grand Champion",
-	
-	"SEASON2UNRANKED": "Unranked",
-	"SEASON2PROSPECT1": "Prospect I",
-	"SEASON2PROSPECT2": "Prospect II",
-	"SEASON2PROSPECT3": "Prospect III",
-	"SEASON2PROSPECT4": "Prospect Elite",
-	"SEASON2CHALLENGER1": "Challenger I",
-	"SEASON2CHALLENGER2": "Challenger II",
-	"SEASON2CHALLENGER3": "Challenger III",
-	"SEASON2CHALLENGER4": "Challenger Elite",
-	"SEASON2STAR1": "Rising Star",
-	"SEASON2STAR2": "Shooting Star",
-	"SEASON2STAR3": "All-Star",
-	"SEASON2STAR4": "SuperStar",
-	"SEASON2CHAMP1": "Champion",
-	"SEASON2CHAMP2": "Super Champion",
-	"SEASON2CHAMP3": "Grand Champion",
 	
 	"WINS" : "Wins",
 	"GOALS" : "Goals",

@@ -5,7 +5,9 @@ public class App : MonoBehaviour {
     private HomeView _homeView;
     [SerializeField]
     private TrackedAccountsView _trackedAccountsView;
-    [SerializeField]
+	[SerializeField]
+	private LeaderboardsView _leaderboardsView;
+	[SerializeField]
     private OptionsView _optionsView;
 	[SerializeField]
 	private PlayerView _playerView;
@@ -25,7 +27,8 @@ public class App : MonoBehaviour {
 
 	void Start() {
         _homeView.SetMainPlayer(_mainAccount);
-		SetHomeView();
+		//SetHomeView();
+		SetLeaderboardsView();
 	}
 
 	public void SetHomeView() {
@@ -35,6 +38,10 @@ public class App : MonoBehaviour {
     public void SetTrackedAccountsView() {
         SetView(_trackedAccountsView);
     }
+
+	public void SetLeaderboardsView() {
+		SetView(_leaderboardsView);
+	}
 
     public void SetOptionsView() {
       SetView(_optionsView);

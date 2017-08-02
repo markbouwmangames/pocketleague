@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using RLSApi.Net.Models;
 
 public class App : MonoBehaviour {
     [SerializeField]
@@ -17,11 +18,8 @@ public class App : MonoBehaviour {
 
 	void Awake() {
 		gameObject.AddComponent<PlayerDatabase>();
-
-		_mainAccount = new PlayerReferenceData() {
-			Platform = RLSApi.Data.RlsPlatform.Ps4,
-			DisplayName = "Mefoz"
-		};
+		gameObject.AddComponent<PlayerTool>();
+		_mainAccount = new PlayerReferenceData(RLSApi.Data.RlsPlatform.Ps4, "Mefoz", "Mefoz");
 	}
 
 

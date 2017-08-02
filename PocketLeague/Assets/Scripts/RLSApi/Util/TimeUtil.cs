@@ -7,5 +7,9 @@ namespace RLSApi.Util {
 		public static DateTimeOffset UnixTimeStampToDateTime(double unixTimeStamp) {
 			return _epoch.AddSeconds(unixTimeStamp);
 		}
+
+		public static float Difference(DateTimeOffset a, DateTimeOffset b) {
+			return (float)(b - a).TotalSeconds;
+		}
 	}
 }

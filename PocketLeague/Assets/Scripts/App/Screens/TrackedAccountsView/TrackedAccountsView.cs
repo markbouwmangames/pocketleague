@@ -19,7 +19,7 @@ public class TrackedAccountsView : BaseView {
         base.OpenView();
 
 		var database = FindObjectOfType<PlayerDatabase>();
-		var players = database.GetReferencedPlayers();
+		var players = database.GetTrackedPlayers();
 		Set(players);
     }
 

@@ -22,8 +22,8 @@ public class LeaderboardViewSelector : MonoBehaviour {
 	[SerializeField]
 	private LeaderboardToggle _unrankedLeaderboardToggleTemplate;
 
-	private Toggle _rankedLeaderboardFirstToggle;
-	private Toggle _unrankedLeaderboardFirstToggle;
+	private Toggle[] _rankedLeaderboardToggles;
+	private Toggle[] _unrankedLeaderboardToggles;
 
 	void Awake() {
 		_rankedLeaderboardToggleTemplate.gameObject.SetActive(false);
@@ -34,13 +34,23 @@ public class LeaderboardViewSelector : MonoBehaviour {
 
 		SetupDefault();
 
-		_rankedSelectToggle.onValueChanged.AddListener(OnRankedToggleClicked);
-		_unrankedSelectToggle.onValueChanged.AddListener(OnUnrankedToggleClicked);
+		_rankedSelectToggle.onValueChanged.AddListener(OnRankedHeaderToggle);
+		_unrankedSelectToggle.onValueChanged.AddListener(OnUnrankedHeaderToggle);
+	}
+	
+	public void Open() {
+		if (_rankedSelectToggle.isOn == false) {
+			_rankedSelectToggle.isOn = true;
+		} else {
+			var toggle = _rankedLeaderboardToggles[0];
+			if (toggle.isOn == false) toggle.isOn = true;
+			else toggle.onValueChanged.Invoke(true);
+		}
 	}
 
 	private void SetupDefault() {
 		_rankedSelectToggle.isOn = true;
-		_rankedLeaderboardFirstToggle.isOn = true;
+		_rankedLeaderboardToggles[0].isOn = true;
 
 		_rankedToggles.SetActive(true);
 		_unrankedToggles.SetActive(false);
@@ -48,22 +58,27 @@ public class LeaderboardViewSelector : MonoBehaviour {
 
 	private void CreateRankedToggles() {
 		var playlists = Enum.GetValues(typeof(RlsPlaylistRanked));
-		for(var i = 0; i < playlists.Length; i++) {
+
+		_rankedLeaderboardToggles = new Toggle[playlists.Length];
+
+		for (var i = 0; i < playlists.Length; i++) {
 			var playlist = (RlsPlaylistRanked)(playlists.GetValue(i));
 
 			var newToggle = UITool.CreateField<LeaderboardToggle>(_rankedLeaderboardToggleTemplate);
 			newToggle.SetText(playlist.ToString().ToUpper());
 			newToggle.OnClick += () => { OnRankedToggleClick(playlist); };
 
-			if(i == 0) {
-				var toggle = newToggle.GetComponent<Toggle>();
-				_rankedLeaderboardFirstToggle = toggle;
-			}
+			var toggle = newToggle.GetComponent<Toggle>();
+			_rankedLeaderboardToggles[i] = toggle;
+
+			if (i != 0) toggle.isOn = false;
 		}
 	}
 
 	private void CreateUnrankedToggles() {
 		var statTypes = Enum.GetValues(typeof(RlsStatType));
+		_unrankedLeaderboardToggles = new Toggle[statTypes.Length];
+
 		for (var i = 0; i < statTypes.Length; i++) {
 			var statType = (RlsStatType)(statTypes.GetValue(i));
 
@@ -71,40 +86,46 @@ public class LeaderboardViewSelector : MonoBehaviour {
 			newToggle.SetText(statType.ToString().ToUpper());
 			newToggle.OnClick += () => { OnUnrankedToggleClick(statType); };
 
-			if (i == 0) {
-				var toggle = newToggle.GetComponent<Toggle>();
-				_unrankedLeaderboardFirstToggle = toggle;
-			}
+			var toggle = newToggle.GetComponent<Toggle>();
+			_unrankedLeaderboardToggles[i] = toggle;
+
+			if (i != 0) toggle.isOn = false;
 		}
 	}
 
+
+	private void OnRankedHeaderToggle(bool value) {
+		OnHeaderToggleClicked(_rankedToggles, _rankedLeaderboardToggles, value);
+	}
+
+	private void OnUnrankedHeaderToggle(bool value) {
+		OnHeaderToggleClicked(_unrankedToggles, _unrankedLeaderboardToggles, value);
+	}
+
 	private void OnRankedToggleClick(RlsPlaylistRanked playlist) {
-		_leaderboardsView.LoadRankedPlaylist(playlist);
+		_leaderboardsView.ShowLeaderboard(playlist);
 	}
 
 	private void OnUnrankedToggleClick(RlsStatType statType) {
-		_leaderboardsView.LoadUnrankedPlaylist(statType);
+		_leaderboardsView.ShowLeaderboard(statType);
 	}
 
-	private void OnRankedToggleClicked(bool value) {
-		OnToggleClicked(_rankedToggles, _rankedLeaderboardFirstToggle, value);
-	}
-
-	private void OnUnrankedToggleClicked(bool value) {
-		OnToggleClicked(_unrankedToggles, _unrankedLeaderboardFirstToggle, value);
-	}
-
-	private void OnToggleClicked(GameObject root, Toggle firstToggle, bool value) {
+	private void OnHeaderToggleClicked(GameObject root, Toggle[] subToggles, bool value) {
 		if (root.activeInHierarchy && value == true) return;
 		if (!root.activeInHierarchy && value != true) return;
 
 		if (value) {
-			if (firstToggle.isOn == false) {
-				firstToggle.isOn = true;
+			if (subToggles[0].isOn == false) {
+				subToggles[0].isOn = true;
 			} else {
-				firstToggle.onValueChanged.Invoke(true);
+				subToggles[0].onValueChanged.Invoke(true);
+			}
+
+			for(int i = 1; i < subToggles.Length; i++) {
+				subToggles[i].isOn = false;
 			}
 		}
+
 		root.SetActive(value);
 	}
 

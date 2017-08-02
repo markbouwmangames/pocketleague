@@ -25,33 +25,20 @@ public class PlayerListView : MonoBehaviour {
 		_platformIcon.sprite = platform.Icon;
 
 		var database = FindObjectOfType<PlayerDatabase>();
-		var player = database.GetLocalPlayerData(playerReference);
-
-		if (string.IsNullOrEmpty(player.Avatar)) {
-			_avatarIcon.texture = _defaultAvatar.texture;
-		} else {
-			_avatarIcon.texture = _defaultAvatar.texture;
-			StartCoroutine(LoadImageRoutine(player.Avatar));
-		}
+		var player = database.GetTrackedPlayerData(playerReference);
+		
+		PlayerTool.LoadAvatar(_avatarIcon, _defaultAvatar, player);
 
 		var rankedSeasons = player.RankedSeasons;
-
 		var seasons = new RlsSeason[rankedSeasons.Count];
 		rankedSeasons.Keys.CopyTo(seasons, 0);
-
 		var latestSeason = seasons[seasons.Length - 1];
+
 		_simpleRankDisplay.Set(latestSeason, rankedSeasons[latestSeason]);
 
 		_button.onClick.AddListener(() => {
 			var app = FindObjectOfType<App>();
 			app.SetPlayerView(playerReference);
 		});
-	}
-
-	private IEnumerator LoadImageRoutine(string url) {
-		UnityWebRequest www = UnityWebRequest.GetTexture(url);
-		yield return www.Send();
-		var texture = DownloadHandlerTexture.GetContent(www);
-		_avatarIcon.texture = texture;
 	}
 }

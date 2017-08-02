@@ -26,18 +26,6 @@ public class InfoView : PlayerViewChild {
         var platform = PlatformTool.GetPlatform(player.Platform);
 		_platformIcon.sprite = platform.Icon;
 
-        if (string.IsNullOrEmpty(player.Avatar)) {
-            _avatarIcon.texture = _defaultAvatar.texture;
-        } else {
-            _avatarIcon.texture = _defaultAvatar.texture;
-            StartCoroutine(LoadImageRoutine(player.Avatar));
-        }
-    }
-
-    private IEnumerator LoadImageRoutine(string url) {
-        UnityWebRequest www = UnityWebRequest.GetTexture(url);
-        yield return www.Send();
-        var texture = DownloadHandlerTexture.GetContent(www);
-        _avatarIcon.texture = texture;
-    }
+		PlayerTool.LoadAvatar(_avatarIcon, _defaultAvatar, player);
+	}
 }

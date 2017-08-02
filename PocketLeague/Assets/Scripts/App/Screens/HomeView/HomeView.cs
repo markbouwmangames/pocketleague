@@ -92,6 +92,8 @@ public class HomeView : BaseUpdateView {
 	}
 
     public void SetPlayer(Player player) {
+		var database = FindObjectOfType<PlayerDatabase>();
+		database.StoreTempPlayer(_mainAccount, player);
 		_playerQuickView.Set(player);
     }
 

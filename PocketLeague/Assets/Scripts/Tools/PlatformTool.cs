@@ -54,7 +54,6 @@ public class PlatformTool : MonoBehaviour {
     }
 
     public static PlatformData GetPlatform(Platform platform) {        
-        var id = int.Parse(platform.Id);
-        return GetPlatform(id);
+        return GetPlatform(platform.Id);
     }
 }

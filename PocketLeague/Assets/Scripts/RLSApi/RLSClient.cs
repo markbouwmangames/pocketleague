@@ -75,6 +75,7 @@ namespace RLSApi {
 		/// <param name="onFail">Returns an error</param>
 		public static void GetPlayer(RlsPlatform platform, string uniqueId, Action<Player> onSuccess, Action<Error> onFail) {
 			var postfix = "player?unique_id=" + Uri.EscapeDataString(uniqueId) + "&platform_id=" + ((int)platform);
+			Debug.Log(postfix);
 			Get<Player>(postfix, onSuccess, onFail);
 		}
 		

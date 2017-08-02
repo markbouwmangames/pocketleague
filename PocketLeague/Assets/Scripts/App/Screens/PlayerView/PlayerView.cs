@@ -4,6 +4,8 @@ using UnityEngine;
 using RLSApi.Net.Models;
 using RLSApi;
 using System;
+using RLSApi.Data;
+using RLSApi.Util;
 
 public class PlayerView : BaseUpdateView {
     private PlayerReferenceData _currentPlayer;
@@ -11,9 +13,22 @@ public class PlayerView : BaseUpdateView {
     protected override void UpdateView(Action onComplete = null) {
         if (onComplete == null) Loader.OnLoadStart();
 
-        GetPlayerData(_currentPlayer, (player) => {
-            //success
-            SetPlayer(player);
+		var database = FindObjectOfType<PlayerDatabase>();
+		var player = database.GetStoredPlayer(_currentPlayer);
+
+		if(player != null) {
+			var difference = TimeUtil.Difference(DateTimeOffset.UtcNow, player.NextUpdateAt);
+			if (difference > 0) {
+				SetPlayerData(player);
+				if (onComplete != null) onComplete.Invoke();
+				else Loader.OnLoadEnd();
+				return;
+			}
+		}
+
+        GetPlayerData(_currentPlayer, (data) => {
+			//success
+			SetPlayerData(data);
             if (onComplete != null) onComplete.Invoke();
             else Loader.OnLoadEnd();
         }, (error) => {
@@ -25,17 +40,18 @@ public class PlayerView : BaseUpdateView {
     public void SetPlayer(PlayerReferenceData playerReference) {
         _currentPlayer = playerReference;
 	}
-
+	
     private void GetPlayerData(PlayerReferenceData playerReference, Action<Player> onSuccess, Action<Error> onFail) {
-        RLSClient.GetPlayer(playerReference.Platform, playerReference.DisplayName, onSuccess, onFail);
+        RLSClient.GetPlayer(playerReference.Platform, playerReference.UniqueId, onSuccess, onFail);
     }
 
-	public void SetPlayer(Player player) {
+	public void SetPlayerData(Player player) {
 		var database = FindObjectOfType<PlayerDatabase>();
-		if (database.ContainsPlayer(_currentPlayer)) {
-			database.UpdatePlayer(_currentPlayer, player);
-		}
+		database.StoreTempPlayer(_currentPlayer, player);
 
+		if (database.GetTrackedPlayerData(_currentPlayer) != null) {
+			database.TrackPlayer(_currentPlayer, player);
+		}
 
 		var children = GetComponentsInChildren<PlayerViewChild>();
 		foreach(var child in children) {

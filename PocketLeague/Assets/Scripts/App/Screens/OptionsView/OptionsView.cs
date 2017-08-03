@@ -6,4 +6,12 @@ public class OptionsView : BaseView {
     protected override void OpenView() {
         base.OpenView();
     }
+
+	public void GoToPsyonix() {
+		Application.OpenURL(Constants.PsyonixUrl);
+	}
+
+	public void GoToRLS() {
+		Application.OpenURL(Constants.RLSUrl);
+	}
 }

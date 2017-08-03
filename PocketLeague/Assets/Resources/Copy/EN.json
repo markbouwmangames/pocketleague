@@ -33,6 +33,11 @@
 	"CURRENTRATING": "Current rating",
 	"DIVUP": "Division up",
 
+	"RESETMAIN" : "Reset main account",
+	"RESETBUTTON" : "RESET",
+	"LEGAL" : "Rocket League is a registered trademark of Psyonix, Inc. We are not affiliated with Psyonix. Psyonix owns everything Rocket League related.",
+	"RLSLINK" : "https://rocketleaguestats.com/",
+
 	"SEASONNAME": "Season [0]",
 	"DUEL" : "1v1 Solo Duel",
 	"DOUBLES" : "2v2 Doubles",

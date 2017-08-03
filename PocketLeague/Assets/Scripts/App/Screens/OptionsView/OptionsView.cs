@@ -7,6 +7,10 @@ public class OptionsView : BaseView {
         base.OpenView();
     }
 
+	public void ResetMain() {
+
+	}
+
 	public void GoToPsyonix() {
 		Application.OpenURL(Constants.PsyonixUrl);
 	}

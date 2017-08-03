@@ -28,13 +28,8 @@ public class PlayerListView : MonoBehaviour {
 		var player = database.GetTrackedPlayerData(playerReference);
 		
 		PlayerTool.LoadAvatar(_avatarIcon, _defaultAvatar, player);
-
-		var rankedSeasons = player.RankedSeasons;
-		var seasons = new RlsSeason[rankedSeasons.Count];
-		rankedSeasons.Keys.CopyTo(seasons, 0);
-		var latestSeason = seasons[seasons.Length - 1];
-
-		_simpleRankDisplay.Set(latestSeason, rankedSeasons[latestSeason]);
+		
+		_simpleRankDisplay.Set(Constants.LatestSeason, player.CurrentSeason());
 
 		_button.onClick.AddListener(() => {
 			var app = FindObjectOfType<App>();

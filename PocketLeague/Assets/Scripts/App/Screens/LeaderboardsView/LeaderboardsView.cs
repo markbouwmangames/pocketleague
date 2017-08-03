@@ -62,7 +62,6 @@ public class LeaderboardsView : BaseUpdateView {
 	}
 
 	public void ShowLeaderboard(RlsPlaylistRanked playlist) {
-		Debug.Log("RlsPlaylistRanked");
 		_currentPlaylist = playlist;
 		_currentStatType = null;
 		ResetView();
@@ -81,7 +80,6 @@ public class LeaderboardsView : BaseUpdateView {
 	}
 
 	public void ShowLeaderboard(RlsStatType statType) {
-		Debug.Log("RlsStatType");
 		_currentPlaylist = null;
 		_currentStatType = statType;
 		ResetView();
@@ -186,11 +184,7 @@ public class LeaderboardsView : BaseUpdateView {
 	}
 
 	private int GetStat(RlsPlaylistRanked playlist, Player player) {
-		var rankedSeasons = player.RankedSeasons;
-		var seasons = new RlsSeason[rankedSeasons.Count];
-		rankedSeasons.Keys.CopyTo(seasons, 0);
-		var latestSeason = seasons[seasons.Length - 1];
-		var stat = player.RankedSeasons[latestSeason][playlist].RankPoints;
+		var stat = player.CurrentSeason()[playlist].RankPoints;
 		return stat;
 	}
 

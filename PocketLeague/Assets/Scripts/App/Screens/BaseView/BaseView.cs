@@ -11,6 +11,8 @@ public abstract class BaseView : MonoBehaviour {
 	}
 
 	public void SetEnabled(bool value) {
+		if (value) gameObject.SetActive(value);
+
         isOpen = value;
 
 		_canvasGroup.alpha = value ? 1 : 0;
@@ -19,6 +21,7 @@ public abstract class BaseView : MonoBehaviour {
 
         if (value) OpenView();
         else CloseView();
+		if (!value) gameObject.SetActive(value);
 	}
 
 	protected virtual void Init() {

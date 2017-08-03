@@ -39,8 +39,8 @@ namespace RLSApi {
             }
         }
 
-        public void Get(string urlPosfix, Action<string> onSuccess, Action<Error> onFail) {
-            var www = GetRequestWWW(urlPosfix);
+        public void Get(string urlPosfix, bool urlOverride, Action<string> onSuccess, Action<Error> onFail) {
+            var www = GetRequestWWW(urlPosfix, urlOverride);
 
             if (_throttleRequests) _requestQueue.Enqueue(new WWWRequestData() {
                 WWW = www,
@@ -50,8 +50,8 @@ namespace RLSApi {
             else DoWWW(www, onSuccess, onFail);
         }
 
-        public void Post(string urlPosfix, string postData, Action<string> onSuccess, Action<Error> onFail) {
-            var www = GetPostWWW(urlPosfix, postData);
+        public void Post(string urlPosfix, bool urlOverride, string postData, Action<string> onSuccess, Action<Error> onFail) {
+            var www = GetPostWWW(urlPosfix, postData, urlOverride);
 
             if (_throttleRequests) _requestQueue.Enqueue(new WWWRequestData() {
                 WWW = www,
@@ -72,15 +72,18 @@ namespace RLSApi {
             }));
         }
 
-        private UnityWebRequest GetRequestWWW(string postfix) {
+        private UnityWebRequest GetRequestWWW(string postfix, bool urlOverride) {
             var url = _url + postfix;
-            UnityWebRequest www = UnityWebRequest.Get(url);
+			if (urlOverride) url = postfix;
+			UnityWebRequest www = UnityWebRequest.Get(url);
             www.SetRequestHeader("Authorization", _authKey);
             return www;
         }
 
-        private UnityWebRequest GetPostWWW(string postfix, string postData) {
+        private UnityWebRequest GetPostWWW(string postfix, string postData, bool urlOverride) {
             var url = _url + postfix;
+			if (urlOverride) url = postfix;
+
             var www = new UnityWebRequest(url, "POST");
             byte[] bodyRaw = new System.Text.UTF8Encoding().GetBytes(postData);
             www.uploadHandler = (UploadHandler)new UploadHandlerRaw(bodyRaw);

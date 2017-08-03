@@ -11,7 +11,7 @@ public class PlayerDatabase : MonoBehaviour {
 
 	private List<Data> _trackedPlayers = new List<Data>();
 	private List<Data> _storedPlayers = new List<Data>();
-	private readonly string dataLocation = "::playerDatabase";
+	private const string dataLocation = "::playerDatabase::storedPlayers";
 
 	void Awake() {
 		var data = PlayerPrefs.GetString(dataLocation, "");

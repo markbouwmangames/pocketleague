@@ -24,14 +24,7 @@ public class PlayerQuickView : MonoBehaviour {
     }
 
 	public void Set(Player player) {
-        var rankedSeasons = player.RankedSeasons;
-
-        var seasons = new RlsSeason[rankedSeasons.Count];
-		rankedSeasons.Keys.CopyTo(seasons, 0);
-		
-        var latestSeason = seasons[seasons.Length - 1];
-		_rankDisplay.Set(latestSeason, rankedSeasons[latestSeason]);
-
+		_rankDisplay.Set(Constants.LatestSeason, player.CurrentSeason());
 		_rankviewTitle.text = CopyDictionary.Get("RANKVIEWTITLE", player.DisplayName);
 	}
 }

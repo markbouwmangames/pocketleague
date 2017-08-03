@@ -5,5 +5,4 @@ public class RankData {
 	public string NameKey;
 	public Sprite Icon;
 	public bool HasDivisions;
-    public DivisionData DivisionRatingData;
 }

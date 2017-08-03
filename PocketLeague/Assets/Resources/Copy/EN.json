@@ -27,6 +27,12 @@
 	"PLAYLISTVIEWTITLE" : "Currently Online",
 	"TWITCHTITLE" : "Currently on Twitch",
 	
+	"PROGRESSION" : "Current Season Progression",
+	"PLAYLIST": "Playlist",
+	"DIVDOWN": "Division down",
+	"CURRENTRATING": "Current rating",
+	"DIVUP": "Division up",
+
 	"SEASONNAME": "Season [0]",
 	"DUEL" : "1v1 Solo Duel",
 	"DOUBLES" : "2v2 Doubles",

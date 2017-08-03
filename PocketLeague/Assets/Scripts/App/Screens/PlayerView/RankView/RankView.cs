@@ -10,8 +10,6 @@ public class RankView : PlayerViewChild {
 	private SeasonSelector _seasonSelector;
 	[SerializeField]
 	private RankDisplay _rankDisplay;
-	[SerializeField]
-	private Text _rankviewTitle;
 
 	private Dictionary<RlsSeason, Dictionary<RlsPlaylistRanked, PlayerRank>> _rankedSeasons;
 

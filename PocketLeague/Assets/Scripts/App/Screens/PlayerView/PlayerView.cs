@@ -10,7 +10,7 @@ using RLSApi.Util;
 public class PlayerView : BaseUpdateView {
     private PlayerReferenceData _currentPlayer;
 
-    protected override void UpdateView(Action onComplete = null) {
+	protected override void UpdateView(Action onComplete = null) {
         if (onComplete == null) Loader.OnLoadStart();
 
 		var database = FindObjectOfType<PlayerDatabase>();

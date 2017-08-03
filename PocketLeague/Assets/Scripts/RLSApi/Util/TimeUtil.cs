@@ -11,5 +11,9 @@ namespace RLSApi.Util {
 		public static float Difference(DateTimeOffset a, DateTimeOffset b) {
 			return (float)(b - a).TotalSeconds;
 		}
+
+		public static float DifferenceDays(DateTimeOffset a, DateTimeOffset b) {
+			return (float)(b - a).TotalDays;
+		}
 	}
 }

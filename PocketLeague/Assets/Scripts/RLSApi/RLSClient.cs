@@ -75,7 +75,6 @@ namespace RLSApi {
 		/// <param name="onFail">Returns an error</param>
 		public static void GetPlayer(RlsPlatform platform, string uniqueId, Action<Player> onSuccess, Action<Error> onFail) {
 			var postfix = "player?unique_id=" + Uri.EscapeDataString(uniqueId) + "&platform_id=" + ((int)platform);
-			Debug.Log(postfix);
 			Get<Player>(postfix, onSuccess, onFail);
 		}
 		
@@ -112,6 +111,11 @@ namespace RLSApi {
 			Get<PlayerSearchPage>(totalPostfix, onSuccess, onFail);
 		}
 
+		public static void GetDivisionBreakdown(RlsPlaylistRanked playlistRanked, Action<List<List<int[]>>> onSuccess, Action<Error> onFail) {
+			var url = "https://api.rocketleaguestats.com/web/graph/global/rating-breakdown?playlistId=" + ((int)(playlistRanked));
+			Get<List<List<int[]>>>(url, onSuccess, onFail, true);
+		}
+
 		/// <summary>
 		/// From here are the internal workings of the RLSClient
 		/// </summary>
@@ -133,8 +137,8 @@ namespace RLSApi {
 			}
 		}
 
-		private static void Get<T>(string urlPostfix, Action<T> onSuccess, Action<Error> onFail) {
-			api.Get(urlPostfix, (data) => {
+		private static void Get<T>(string urlPostfix, Action<T> onSuccess, Action<Error> onFail, bool urlOverride = false) {
+			api.Get(urlPostfix, urlOverride, (data) => {
 				//success
 				var result = JsonConvert.DeserializeObject<T>(data);
 				if (onSuccess != null) onSuccess.Invoke(result);
@@ -144,8 +148,8 @@ namespace RLSApi {
 			});
 		}
 
-		private static void Post<T>(string urlPostfix, string postData, Action<T> onSuccess, Action<Error> onFail) {
-			api.Post(urlPostfix, postData, (data) => {
+		private static void Post<T>(string urlPostfix, string postData, Action<T> onSuccess, Action<Error> onFail, bool urlOverride = false) {
+			api.Post(urlPostfix, urlOverride, postData, (data) => {
 				//success
 				var result = JsonConvert.DeserializeObject<T>(data);
 				if (onSuccess != null) onSuccess.Invoke(result);

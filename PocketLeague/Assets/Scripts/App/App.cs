@@ -19,14 +19,15 @@ public class App : MonoBehaviour {
 	void Awake() {
 		gameObject.AddComponent<PlayerDatabase>();
 		gameObject.AddComponent<PlayerTool>();
+		gameObject.AddComponent<DivisionBreakdownDatabase>();
+
 		_mainAccount = new PlayerReferenceData(RLSApi.Data.RlsPlatform.Ps4, "Mefoz", "Mefoz");
 	}
 
 
 	void Start() {
         _homeView.SetMainPlayer(_mainAccount);
-		//SetHomeView();
-		SetLeaderboardsView();
+		SetHomeView();
 	}
 
 	public void SetHomeView() {

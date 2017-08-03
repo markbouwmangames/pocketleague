@@ -5,6 +5,7 @@ using RLSApi.Net.Models;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using RLSApi.Util;
 
 public class LeaderboardsView : BaseUpdateView {
 
@@ -14,6 +15,9 @@ public class LeaderboardsView : BaseUpdateView {
 	private Dictionary<RlsPlaylistRanked, Player[]> _playerRankedLookup = new Dictionary<RlsPlaylistRanked, Player[]>();
 	private Dictionary<RlsStatType, Player[]> _playerUnrankedLookup = new Dictionary<RlsStatType, Player[]>();
 
+	private Dictionary<RlsPlaylistRanked, DateTimeOffset> _playerRankedLoadTime = new Dictionary<RlsPlaylistRanked, DateTimeOffset>();
+	private Dictionary<RlsStatType, DateTimeOffset> _playerunRankedLoadTime = new Dictionary<RlsStatType, DateTimeOffset>();
+	
 	[SerializeField]
 	private LeaderboardPlayerView _leaderboardPlayerViewTemplate;
 	[SerializeField]
@@ -23,6 +27,8 @@ public class LeaderboardsView : BaseUpdateView {
 
 	private List<LeaderboardPlayerView> _playerViews = new List<LeaderboardPlayerView>();
 
+	private Action _onComplete;
+
 	protected override void Init() {
 		_leaderboardPlayerViewTemplate.gameObject.SetActive(false);
 		base.Init();
@@ -30,7 +36,6 @@ public class LeaderboardsView : BaseUpdateView {
 
 	protected override void OpenView() {
 		base.OpenView();
-		_leaderboardViewSelector.Open();
 	}
 
 	protected override void CloseView() {
@@ -38,17 +43,22 @@ public class LeaderboardsView : BaseUpdateView {
 	}
 
 	protected override void UpdateView(Action onComplete = null) {
-		//load current player data
-		/*_playerRankedLookup.Clear();
-		_playerUnrankedLookup.Clear();
+		_onComplete = onComplete;
 
-		if (_currentPlaylist != null) {
-			ShowLeaderboard(_currentPlaylist.Value);
+		if (onComplete == null) {
+			Loader.OnLoadStart();
+			_leaderboardViewSelector.Open();
+		}  else {
+			if (_currentPlaylist != null) {
+				_playerRankedLookup.Remove(_currentPlaylist.Value);
+				ShowLeaderboard(_currentPlaylist.Value);
+			}
+
+			if (_currentStatType != null) {
+				_playerUnrankedLookup.Remove(_currentStatType.Value);
+				ShowLeaderboard(_currentStatType.Value);
+			}
 		}
-
-		if (_currentStatType != null) {
-			ShowLeaderboard(_currentStatType.Value);
-		}*/
 	}
 
 	public void ShowLeaderboard(RlsPlaylistRanked playlist) {
@@ -58,7 +68,13 @@ public class LeaderboardsView : BaseUpdateView {
 		ResetView();
 
 		if (_playerRankedLookup.ContainsKey(playlist)) {
-			SetView(playlist, _playerRankedLookup[playlist]);
+			var time = _playerRankedLoadTime[playlist];
+			var difference = TimeUtil.Difference(DateTimeOffset.UtcNow, time);
+			if (difference > 0) {
+				SetView(playlist, _playerRankedLookup[playlist]);
+			} else {
+				LoadPlaylist(playlist);
+			}
 		} else {
 			LoadPlaylist(playlist);
 		}
@@ -71,7 +87,13 @@ public class LeaderboardsView : BaseUpdateView {
 		ResetView();
 
 		if (_playerUnrankedLookup.ContainsKey(statType)) {
-			SetView(statType, _playerUnrankedLookup[statType]);
+			var time = _playerunRankedLoadTime[statType];
+			var difference = TimeUtil.Difference(DateTimeOffset.UtcNow, time);
+			if (difference > 0) {
+				SetView(statType, _playerUnrankedLookup[statType]);
+			} else {
+				LoadPlaylist(statType);
+			}
 		} else {
 			LoadPlaylist(statType);
 		}
@@ -94,6 +116,13 @@ public class LeaderboardsView : BaseUpdateView {
 	}
 
 	private void LoadPlaylist(RlsPlaylistRanked playlist) {
+		var nextUpdateTime = (DateTimeOffset.UtcNow).AddMinutes(15);
+		if (_playerRankedLoadTime.ContainsKey(playlist)) {
+			_playerRankedLoadTime[playlist] = nextUpdateTime;
+		} else {
+			_playerRankedLoadTime.Add(playlist, nextUpdateTime);
+		}
+
 		RLSClient.GetLeaderboardRanked(playlist, (players) => {
 			//succes
 			SetLookup(playlist, players);
@@ -108,6 +137,13 @@ public class LeaderboardsView : BaseUpdateView {
 	}
 
 	private void LoadPlaylist(RlsStatType statType) {
+		var nextUpdateTime = (DateTimeOffset.UtcNow).AddMinutes(15);
+		if (_playerunRankedLoadTime.ContainsKey(statType)) {
+			_playerunRankedLoadTime[statType] = nextUpdateTime;
+		} else {
+			_playerunRankedLoadTime.Add(statType, nextUpdateTime);
+		}
+
 		RLSClient.GetLeaderboardStats(statType, (players) => {
 			//succes
 			SetLookup(statType, players);
@@ -180,14 +216,15 @@ public class LeaderboardsView : BaseUpdateView {
 		foreach (var v in _playerViews) {
 			v.gameObject.SetActive(false);
 		}
-		_contentHolder.preferredHeight = 0;
-		var rectTransform = _contentHolder.GetComponent<RectTransform>();
-		var size = rectTransform.sizeDelta;
-		size.y = 0;
-		rectTransform.sizeDelta = size;
 	}
 
 	private void SetView(int numChildren) {
+		if(_onComplete != null) {
+			_onComplete();
+		} else {
+			Loader.OnLoadEnd();
+		}
+
 		_contentHolder.preferredHeight = numChildren * 100;
 		var rectTransform = _contentHolder.GetComponent<RectTransform>();
 		var size = rectTransform.sizeDelta;

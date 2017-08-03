@@ -60,7 +60,7 @@ public class PlaylistPopulationView : MonoBehaviour {
     private void SetHeight(int numPlaylists) {
         var prefPlatformSelectorHeight = _platformSelector.GetComponent<LayoutElement>().preferredHeight;
         var prefPlaylistPopulationDisplayHeight = _playlistPopulationDisplayTemplate.GetComponent<LayoutElement>().preferredHeight;
-        var height = prefPlatformSelectorHeight + (prefPlaylistPopulationDisplayHeight * numPlaylists);
+        var height = prefPlatformSelectorHeight + (prefPlaylistPopulationDisplayHeight * (numPlaylists - _hiddenPlaylists.Count));
         GetComponent<LayoutElement>().preferredHeight = height;
 
         var rect = GetComponent<RectTransform>();

@@ -19,7 +19,6 @@ public class LeaderboardToggle : MonoBehaviour {
 	}
 
 	private void OnToggleValueChanged(bool value) {
-		var toggle = GetComponent<Toggle>();
 		if (value) {
 			if (OnClick != null) OnClick();
 		}

@@ -37,7 +37,9 @@ public class PlatformTool : MonoBehaviour {
 
         var resourceName = "";
 
-        if (platformId == 1) {
+		if(platformId == 0) {
+			resourceName = "Any";
+		} else if (platformId == 1) {
             resourceName = "Steam";
         } else if (platformId == 2) {
             resourceName = "PS4";

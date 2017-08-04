@@ -74,8 +74,9 @@ public class HomeView : BaseUpdateView {
 
             UpdateStreams(streams);
         }, (error) => {
-            //error
-            Debug.LogWarning("TODO: IMPLEMENT ERROR HANDLING");
+			//error
+			_hasLoaded["GetTrendingClips"] = true;
+			Debug.LogWarning("TODO: IMPLEMENT ERROR HANDLING");
         });
 	}
 

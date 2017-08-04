@@ -15,6 +15,8 @@ public class InfoView : PlayerViewChild {
 	private RawImage _avatarIcon;
     [SerializeField]
     private Sprite _defaultAvatar;
+	[SerializeField]
+	private Button _addToTrackedList;
 
 	public override void Set(Player player) {
 		_playerName.text = player.DisplayName;
@@ -27,5 +29,13 @@ public class InfoView : PlayerViewChild {
 		_platformIcon.sprite = platform.Icon;
 
 		PlayerTool.LoadAvatar(_avatarIcon, _defaultAvatar, player);
+
+		var database = FindObjectOfType<PlayerDatabase>();
+		_addToTrackedList.gameObject.SetActive(!database.ContainsTrackedPlayer(player));
+		_addToTrackedList.onClick.RemoveAllListeners();
+		_addToTrackedList.onClick.AddListener(() => {
+			database.TrackPlayer(player);
+			_addToTrackedList.gameObject.SetActive(false);
+		});
 	}
 }

@@ -2,9 +2,13 @@
 using RLSApi.Net.Models;
 
 public class App : MonoBehaviour {
-    [SerializeField]
+	[SerializeField]
+	private IntroView _introView;
+	[SerializeField]
     private HomeView _homeView;
-    [SerializeField]
+	[SerializeField]
+	private SearchView _searchView;
+	[SerializeField]
     private TrackedAccountsView _trackedAccountsView;
 	[SerializeField]
 	private LeaderboardsView _leaderboardsView;
@@ -26,12 +30,20 @@ public class App : MonoBehaviour {
 
 
 	void Start() {
-        _homeView.SetMainPlayer(_mainAccount);
-		SetHomeView();
+		_homeView.SetMainPlayer(_mainAccount);
+		SetSearchView();
+	}
+
+	public void SetIntroView() {
+		SetView(_introView);
 	}
 
 	public void SetHomeView() {
 		SetView(_homeView);
+	}
+
+	public void SetSearchView() {
+		SetView(_searchView);
 	}
 
     public void SetTrackedAccountsView() {

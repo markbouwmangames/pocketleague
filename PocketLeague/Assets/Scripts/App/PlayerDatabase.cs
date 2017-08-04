@@ -60,6 +60,10 @@ public class PlayerDatabase : MonoBehaviour {
 	#endregion
 
 	#region Tracked Players
+	public void TrackPlayer(Player player) {
+		TrackPlayer(player.Convert(), player);
+	}
+
 	public void TrackPlayer(PlayerReferenceData playerReferenceData, Player player) {
 		//if database contains player
 		for (var i = 0; i < _trackedPlayers.Count; i++) {
@@ -77,6 +81,20 @@ public class PlayerDatabase : MonoBehaviour {
 			Player = player
 		});
 		StoreData();
+	}
+
+	public bool ContainsTrackedPlayer(Player player) {
+		return ContainsTrackedPlayer(player.Convert());
+	}
+
+	public bool ContainsTrackedPlayer(PlayerReferenceData playerReferenceData) {
+		for (var i = 0; i < _trackedPlayers.Count; i++) {
+			var saveData = _trackedPlayers[i];
+			if (saveData.PlayerReferenceData.Equals(playerReferenceData)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void RemovePlayer(PlayerReferenceData playerReferenceData) {

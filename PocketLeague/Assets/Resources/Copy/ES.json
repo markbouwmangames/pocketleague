@@ -13,10 +13,9 @@
 	"REASSURETEXT" : "Don't worry, you can always do this later.",
 	"ENTERUSERNAME" : "Now, enter your username!",
 	
-	"PLATFORM_ANY" : "ANY",
-	"PLATFORM_PS4" : "PS4",
-	"PLATFORM_STEAM" : "Steam",
-	"PLATFORM_XBOX" : "XBOX",
+	"PS4" : "PS4",
+	"STEAM" : "Steam",
+	"XBOX" : "XBOX",
 	
 	"USERNAMEPLACEHOLDER" : "Enter username...",
 	"ADDPLAYERSMESSAGE" : "Oops! It looks like you haven't put any players on your shortlist yet. Press the + icon when viewing a player to add them to this list.",
@@ -24,12 +23,9 @@
 	"LASTUPDATE": "Last update: [0] at [1] GMT",
 
 	"HOME" : "Home",
-	"SEARCH" : "Search",
 	"TRACKEDACCOUNTS" : "Tracked Accounts",
-	"OPTIONS" : "Options",
+	"OPTIONS" : "Si",
 	"LEADERBOARDS" : "Leaderboards",
-
-	"SELECTPLATFORM" : "Select a platform",
 
 	"RANKVIEWTITLE" : "[0]",
 	"PLAYLISTVIEWTITLE" : "Currently Online",

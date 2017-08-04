@@ -6,6 +6,7 @@ using System;
 public enum Language {
 	EN = 0,
     NL = 1,
+	ES = 2,
 }
 
 public class CopyDictionary {
@@ -16,6 +17,7 @@ public class CopyDictionary {
 	private static Language currentLanguage;
 
 	private static Dictionary<string, string> copy;
+	private static CopyTextfield[] copyTextfields;
 
 	public static void SetLanguage(Language language) {
 		SetLanguage(language, true);
@@ -29,6 +31,12 @@ public class CopyDictionary {
 		TextAsset targetFile = Resources.Load<TextAsset>(filePath);
 		var json = targetFile.text;
 		copy = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+
+		if(update) {
+			foreach(var copyTextfield in copyTextfields) {
+				copyTextfield.UpdateText();
+			}
+		}
 	}
 
 	public static Language GetLanguage() {
@@ -79,6 +87,9 @@ public class CopyDictionary {
 
 		var languageKey = PlayerPrefs.GetInt(KEYLOCATION, 0);
 		var language = ((Language)(languageKey));
+
+		var app = GameObject.FindObjectOfType<App>();
+		copyTextfields = app.GetComponentsInChildren<CopyTextfield>();
 
 		SetLanguage(language, false);
 	}

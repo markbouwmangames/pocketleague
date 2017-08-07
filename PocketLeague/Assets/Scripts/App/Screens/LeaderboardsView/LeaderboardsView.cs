@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using RLSApi.Util;
 
-public class LeaderboardsView : BaseUpdateView {
+public class LeaderboardsView : ExtendedUpdateView {
 
 	private RlsPlaylistRanked? _currentPlaylist;
 	private RlsStatType? _currentStatType;

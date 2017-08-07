@@ -61,7 +61,7 @@ public class PlatformSelector : MonoBehaviour {
 
 			var iconTransform = toggle.transform.FindChild("Icon");
 			var image = iconTransform.GetComponent<Image>();
-			image.sprite = PlatformTool.GetPlatform(platform).Icon;
+			image.sprite = PlatformTool.GetPlatformData(platform).Icon;
 
 			toggle.onValueChanged.AddListener((value) => {
 				OnToggleChanged(platform, value);

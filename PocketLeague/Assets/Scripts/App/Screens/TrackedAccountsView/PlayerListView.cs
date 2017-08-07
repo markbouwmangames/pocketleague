@@ -21,12 +21,12 @@ public class PlayerListView : MonoBehaviour {
 	public void Set(PlayerReferenceData playerReference) {
 		_playerName.text = playerReference.DisplayName;
 
-		var platform = PlatformTool.GetPlatform(playerReference.Platform);
+		var platform = PlatformTool.GetPlatformData(playerReference.Platform);
 		_platformIcon.sprite = platform.Icon;
 
 		var database = FindObjectOfType<PlayerDatabase>();
-		var player = database.GetTrackedPlayerData(playerReference);
-		
+		var player = database.GetStoredPlayer(playerReference);
+
 		PlayerTool.LoadAvatar(_avatarIcon, _defaultAvatar, player);
 		
 		_simpleRankDisplay.Set(Constants.LatestSeason, player.CurrentSeason());

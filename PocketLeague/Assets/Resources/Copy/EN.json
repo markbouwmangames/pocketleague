@@ -24,12 +24,16 @@
 	"LASTUPDATE": "Last update: [0] at [1] GMT",
 
 	"HOME" : "Home",
-	"SEARCH" : "Search",
 	"TRACKEDACCOUNTS" : "Tracked Accounts",
 	"OPTIONS" : "Options",
 	"LEADERBOARDS" : "Leaderboards",
+	"SEARCH" : "Search for a player",
+	"GO" : "GO",
 
 	"SELECTPLATFORM" : "Select a platform",
+	"SEARCHERROR" : "Oops! It looks like we couldn't find that player directly. Here's a list of the closest results.",
+	"NUMRESULTS" : "[0] results",
+	"NUMRESULTSLIMITREACHED" : "[0] results, displaying only the first [1]. Try limiting your seach query.",
 
 	"RANKVIEWTITLE" : "[0]",
 	"PLAYLISTVIEWTITLE" : "Currently Online",
@@ -57,7 +61,7 @@
 
 	"PLAYLIST_DUEL" : "Unranked 1v1 Solo Duel",
 	"PLAYLIST_DOUBLES" : "Unranked 2v2 Doubles",
-	"PLAYLIST_Standard" : "Unranked 3v3 Standard",
+	"PLAYLIST_STANDARD" : "Unranked 3v3 Standard",
 	"PLAYLIST_CHAOS" : "Unranked 4v4 Chaos",
 	"PLAYLIST_RANKEDDUEL" : "Ranked 1v1 Solo Duel",
 	"PLAYLIST_RANKEDDOUBLES" : "Ranked 2v2 Doubles",

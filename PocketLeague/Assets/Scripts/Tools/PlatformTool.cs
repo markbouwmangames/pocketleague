@@ -6,30 +6,30 @@ using UnityEngine;
 public class PlatformTool : MonoBehaviour {
     private static Dictionary<int, PlatformData> platformDatas = new Dictionary<int, PlatformData>();
 
-    public static PlatformData GetPlatform(RlsPlatform platform) {
-        return GetPlatform((int)platform);
+    public static PlatformData GetPlatformData(RlsPlatform platform) {
+        return GetPlatformData((int)platform);
     }
 
-    public static PlatformData GetPlatform(string platformName) {
+    public static PlatformData GetPlatformData(string platformName) {
         var str = platformName.ToLower();
 
         if (str == "steam") {
-            return GetPlatform(1);
+            return GetPlatformData(1);
         }
 
         if (str == "ps4") {
-            return GetPlatform(2);
+            return GetPlatformData(2);
         }
 
         if (str == "xbox") {
-            return GetPlatform(3);
+            return GetPlatformData(3);
         }
 
         Debug.LogWarning("Platform not defined!");
         return null;
     }
 
-    public static PlatformData GetPlatform(int platformId) {
+    public static PlatformData GetPlatformData(int platformId) {
         PlatformData platformData;
         if (platformDatas.TryGetValue(platformId, out platformData)) {
             return platformData;
@@ -55,7 +55,7 @@ public class PlatformTool : MonoBehaviour {
         return platform;
     }
 
-    public static PlatformData GetPlatform(Platform platform) {        
-        return GetPlatform(platform.Id);
+    public static PlatformData GetPlatformData(Platform platform) {        
+        return GetPlatformData(platform.Id);
     }
 }

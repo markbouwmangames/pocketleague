@@ -6,7 +6,7 @@ using Twitch.Net.Models;
 using System.Collections.Generic;
 using System;
 
-public class HomeView : BaseUpdateView {
+public class HomeView : ExtendedUpdateView {
     [SerializeField]
     private PlayerQuickView _playerQuickView;
 
@@ -40,7 +40,7 @@ public class HomeView : BaseUpdateView {
 		_hasLoaded["GetTrendingClips"] = false;
 
         //load player data
-        RLSClient.GetPlayer(_mainAccount.Platform, _mainAccount.DisplayName, (player) => {
+        PlayerTool.GetPlayer(_mainAccount.Platform, _mainAccount.DisplayName, (player) => {
             //succes
             _hasLoaded["GetPlayer"] = true;
             if (HasLoadedAll && onComplete != null) onComplete.Invoke();

@@ -25,7 +25,7 @@ public class InfoView : PlayerViewChild {
         CopyDictionary.FormatTime(player.UpdatedAt, out date, out time);
         _lastUpdatedAtTime.text = CopyDictionary.Get("LASTUPDATE", date, time);
 
-        var platform = PlatformTool.GetPlatform(player.Platform);
+        var platform = PlatformTool.GetPlatformData(player.Platform);
 		_platformIcon.sprite = platform.Icon;
 
 		PlayerTool.LoadAvatar(_avatarIcon, _defaultAvatar, player);

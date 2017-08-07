@@ -27,7 +27,7 @@ public class LeaderboardPlayerView : MonoBehaviour {
 		_stat.text = stat.ToString();
 		_username.text = player.DisplayName;
 
-		var platform = PlatformTool.GetPlatform(player.Platform);
+		var platform = PlatformTool.GetPlatformData(player.Platform);
 		_platformIcon.sprite = platform.Icon;
 
 		PlayerTool.LoadAvatar(_avatarIcon, _defaultAvatar, player);

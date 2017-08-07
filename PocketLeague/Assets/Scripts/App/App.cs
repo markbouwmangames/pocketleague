@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using RLSApi.Net.Models;
+using RLSApi.Data;
 
 public class App : MonoBehaviour {
 	[SerializeField]
 	private IntroView _introView;
 	[SerializeField]
-    private HomeView _homeView;
+	private HomeView _homeView;
 	[SerializeField]
 	private SearchView _searchView;
 	[SerializeField]
@@ -20,6 +21,12 @@ public class App : MonoBehaviour {
 	private BaseView _currentActive;
 	private PlayerReferenceData _mainAccount;
 
+	public BaseView CurrentView {
+		get {
+			return _currentActive;
+		}
+	}
+
 	void Awake() {
 		gameObject.AddComponent<PlayerDatabase>();
 		gameObject.AddComponent<PlayerTool>();
@@ -31,21 +38,22 @@ public class App : MonoBehaviour {
 
 	void Start() {
 		_homeView.SetMainPlayer(_mainAccount);
-		SetSearchView();
+		SetHomeView();
 	}
 
 	public void SetIntroView() {
 		SetView(_introView);
 	}
 
-	public void SetHomeView() {
-		SetView(_homeView);
-	}
-
-	public void SetSearchView() {
+	public void SetSearchView(RlsPlatform platform, string id) {
+		_searchView.SetQuery(platform, id);
 		SetView(_searchView);
 	}
 
+	public void SetHomeView() {
+		SetView(_homeView);
+	}
+	
     public void SetTrackedAccountsView() {
         SetView(_trackedAccountsView);
     }
@@ -64,7 +72,7 @@ public class App : MonoBehaviour {
     }
 
 	private void SetView(BaseView view) {
-		if (view == _currentActive) return;
+		if (view == _currentActive && view is BaseUpdateView == false) return;
 
 		if (_currentActive != null) {
 			_currentActive.SetEnabled(false);

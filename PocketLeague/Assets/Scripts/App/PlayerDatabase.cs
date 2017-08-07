@@ -17,15 +17,30 @@ public class PlayerDatabase : MonoBehaviour {
 		var data = PlayerPrefs.GetString(dataLocation, "");
 		if (string.IsNullOrEmpty(data) == false) {
 			_trackedPlayers = JsonConvert.DeserializeObject<List<Data>>(data);
+
+			foreach(var v in _trackedPlayers) {
+				_storedPlayers.Add(v);
+			}
 		}
 	}
 
 	#region Session Stored Players
 	public void StoreTempPlayer(PlayerReferenceData playerReferenceData, Player player) {
+		for (var i = 0; i < _storedPlayers.Count; i++) {
+			var saveData = _storedPlayers[i];
+			if (saveData.PlayerReferenceData.Equals(playerReferenceData)) {
+				_storedPlayers[i].Player = player;
+				return;
+			}
+		}
+
 		_storedPlayers.Add(new Data() {
 			PlayerReferenceData = playerReferenceData,
 			Player = player
 		});
+	}
+	public void StoreTempPlayer(Player player) {
+		StoreTempPlayer(player.Convert(), player);
 	}
 
 	public Player GetStoredPlayer(PlayerReferenceData playerReferenceData) {

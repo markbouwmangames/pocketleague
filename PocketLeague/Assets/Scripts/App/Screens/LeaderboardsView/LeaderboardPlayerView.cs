@@ -34,6 +34,7 @@ public class LeaderboardPlayerView : MonoBehaviour {
 
 		_playerReferenceData = player.Convert();
 		var button = GetComponent<Button>();
+		button.onClick.RemoveAllListeners();
 		button.onClick.AddListener(OnClick);
 	}
 

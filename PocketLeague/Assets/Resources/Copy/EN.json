@@ -8,47 +8,48 @@
 	"INTROTEXT" : "Pocket League is the #1 Rocket League Stat Tracking app. Use it to track your own stats and those of your friends. Running out of people to play with? Use our matchmaking system to find you people to play with or against, based on your rank!",
 	"INTROCTABUTTON" : "LET'S GO",
 	"SKIP" : "skip",
-	"INTROLEGAL" : "Psyonix and Rocket League are a Psyonix. Inc trademark.",
-	"PLATFORMSELECT" : "First, we're going to set up your main account. For that, we need to know what platform you play on.",
 	"REASSURETEXT" : "Don't worry, you can always do this later.",
-	"ENTERUSERNAME" : "Now, enter your username!",
-	
-	"PLATFORM_ANY" : "ANY",
-	"PLATFORM_PS4" : "PS4",
-	"PLATFORM_STEAM" : "Steam",
-	"PLATFORM_XBOX" : "XBOX",
-	
-	"USERNAMEPLACEHOLDER" : "Enter username...",
-	"ADDPLAYERSMESSAGE" : "Oops! It looks like you haven't put any players on your shortlist yet. Press the + icon when viewing a player to add them to this list.",
-	"LOADING" : "Loading...",
-	"LASTUPDATE": "Last update: [0] at [1] GMT",
 
 	"HOME" : "Home",
 	"TRACKEDACCOUNTS" : "Tracked Accounts",
 	"OPTIONS" : "Options",
+	"SEARCH" : "Search",
 	"LEADERBOARDS" : "Leaderboards",
-	"SEARCH" : "Search for a player",
 	"GO" : "GO",
+	
+	"LOADING" : "Loading...",
 
-	"SELECTPLATFORM" : "Select a platform",
+	"USERNAMEPLACEHOLDER" : "Enter username...",
 	"SEARCHERROR" : "Oops! It looks like we couldn't find that player directly. Here's a list of the closest results.",
 	"NUMRESULTS" : "[0] results",
 	"NUMRESULTSLIMITREACHED" : "[0] results, displaying only the first [1]. Try limiting your seach query.",
-
+		
 	"RANKVIEWTITLE" : "[0]",
 	"PLAYLISTVIEWTITLE" : "Currently Online",
 	"TWITCHTITLE" : "Currently on Twitch",
 	
+	"LASTUPDATE": "Last update: [0] at [1] GMT",
 	"PROGRESSION" : "Current Season Progression",
 	"PLAYLIST": "Playlist",
 	"DIVDOWN": "Division down",
 	"CURRENTRATING": "Current rating",
 	"DIVUP": "Division up",
+	
+	"ADDPLAYERSMESSAGE" : "Oops! It looks like you haven't put any players on your shortlist yet. Press the + icon when viewing a player to add them to this list.",
+	"REMOVEPLAYER_TITLE" : "Removing player!",
+	"REMOVEPLAYER_MESSAGE" : "Are you sure you want to remove [0] from your shortlist?",
+	"REMOVEPLAYER_OK" : "Ok",
+	"REMOVEPLAYER_CANCEL" : "Cancel",
 
 	"RESETMAIN" : "Reset main account",
 	"RESETBUTTON" : "RESET",
 	"LEGAL" : "Rocket League is a registered trademark of Psyonix, Inc. We are not affiliated with Psyonix. Psyonix owns everything Rocket League related.",
 	"RLSLINK" : "https://rocketleaguestats.com/",
+	
+	"PLATFORM_ANY" : "ANY",
+	"PLATFORM_PS4" : "PS4",
+	"PLATFORM_STEAM" : "Steam",
+	"PLATFORM_XBOX" : "XBOX",
 
 	"SEASONNAME": "Season [0]",
 	"DUEL" : "1v1 Solo Duel",
@@ -75,7 +76,19 @@
 	"PLAYLIST_DROPSHOT" : "Dropshot",
 	
 	"DIVISION" : "Division [0]",
-	
+		
+	"SEASON1UNRANKED": "Unranked",
+	"SEASON1BRONZE1" : "Bronze I",
+	"SEASON1BRONZE2" : "Bronze II",
+	"SEASON1BRONZE3" : "Bronze III",
+	"SEASON1SILVER1" : "Silver I",
+	"SEASON1SILVER2" : "Silver II",
+	"SEASON1SILVER3" : "Silver III",
+	"SEASON1GOLD1" : "Gold I",
+	"SEASON1GOLD2" : "Gold II",
+	"SEASON1GOLD3" : "Gold III",
+	"SEASON1PLATINUM" : "Platinum",
+
 	"SEASON2UNRANKED": "Unranked",
 	"SEASON2PROSPECT1": "Prospect I",
 	"SEASON2PROSPECT2": "Prospect II",

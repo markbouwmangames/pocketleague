@@ -43,6 +43,12 @@ public class PlaylistRankDisplay : MonoBehaviour {
 			key = _currentSeason.Ranks[index].NameKey;
 		}
 
+		if(_currentSeason.Season == RlsSeason.One) {
+			var points = playerRank.RankPoints;
+			var tier = Mathf.FloorToInt(((float)(points)) / 100f);
+			key = _currentSeason.Ranks[tier].NameKey;
+		}
+
 		var text = CopyDictionary.Get(key);
 		foreach (var rank in ranks) {
 			rank.text = text;

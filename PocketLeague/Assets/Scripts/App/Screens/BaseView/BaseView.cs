@@ -13,15 +13,15 @@ public abstract class BaseView : MonoBehaviour {
 	public void SetEnabled(bool value) {
 		if (value) gameObject.SetActive(value);
 
-        isOpen = value;
-
 		_canvasGroup.alpha = value ? 1 : 0;
 		_canvasGroup.blocksRaycasts = value;
 		_canvasGroup.interactable = value;
 
         if (value) OpenView();
-        else CloseView();
+        else if(isOpen) CloseView();
 		if (!value) gameObject.SetActive(value);
+		
+		isOpen = value;
 	}
 
 	protected virtual void Init() {
@@ -33,6 +33,6 @@ public abstract class BaseView : MonoBehaviour {
     }
 
     protected virtual void CloseView() {
-
-    }
+		Loader.OnLoadEnd();
+	}
 }

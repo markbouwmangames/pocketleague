@@ -33,8 +33,23 @@ public class TrackedAccountsView : BaseView {
 		_addPlayerMessage.SetActive(players.Length == 0);
 	}
 
+	public void Remove(PlayerReferenceData player) {
+		for(var i  =0; i < _playerListViews.Count; i++) {
+			var listView = _playerListViews[i];
+			if(listView.Player.Equals(player)) {
+				var database = FindObjectOfType<PlayerDatabase>();
+				database.RemovePlayer(player);
+
+				Destroy(listView.gameObject);
+				_playerListViews.RemoveAt(i);
+				return;
+			}
+		}
+	}
+
 	private void CreatePlayerListView(PlayerReferenceData playerReference) {
 		var playerListView = UITool.CreateField<PlayerListView>(_playerListViewTemplate);
+		playerListView.gameObject.name = playerReference.DisplayName;
 		playerListView.Set(playerReference);
 		_playerListViews.Add(playerListView);
 	}

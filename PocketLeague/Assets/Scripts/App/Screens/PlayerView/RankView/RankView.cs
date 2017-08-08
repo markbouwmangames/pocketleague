@@ -20,14 +20,27 @@ public class RankView : PlayerViewChild {
 	public override void Set(Player player) {
 		_rankedSeasons = player.RankedSeasons;
 
-		var seasons = new RlsSeason[_rankedSeasons.Count];
-		_rankedSeasons.Keys.CopyTo(seasons, 0);
+		RlsSeason[] seasons = null;
+
+		if (_rankedSeasons.ContainsKey(Constants.LatestSeason) == false) {
+			var temp = new RlsSeason[_rankedSeasons.Count];
+			_rankedSeasons.Keys.CopyTo(temp, 0);
+
+			seasons = new RlsSeason[_rankedSeasons.Count + 1];
+			seasons[0] = Constants.LatestSeason;
+			for (int i = 0; i < _rankedSeasons.Count; i++) {
+				seasons[i + 1] = temp[i];
+			}
+		} else {
+			seasons = new RlsSeason[_rankedSeasons.Count];
+			_rankedSeasons.Keys.CopyTo(seasons, 0);
+		}
 
 		if (_seasonSelector != null) {
 			_seasonSelector.SetSeasonButtons(seasons);
 		}
 
-		var latest = seasons[seasons.Length - 1];
+		var latest = Constants.LatestSeason;
 		SetSeason(latest);
 	}
 
@@ -36,7 +49,8 @@ public class RankView : PlayerViewChild {
 	}
 
 	public void SetSeason(RlsSeason season) {
-		var seasonData = _rankedSeasons[season];
+		Dictionary<RlsPlaylistRanked, PlayerRank> seasonData = null;
+		_rankedSeasons.TryGetValue(season, out seasonData);
 		_rankDisplay.Set(season, seasonData);
 	}
 }

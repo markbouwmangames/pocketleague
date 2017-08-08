@@ -36,14 +36,24 @@ public class ProgressionView : PlayerViewChild {
 		gameObject.SetActive(hasData);
 		if (!hasData) return;
 
-		var currentSeason = player.CurrentSeason();
-		
-		foreach(var kvp in currentSeason) {
-			var playlist = kvp.Key;
-			var rank = kvp.Value;
+		var currentSeason = player.MostRecentSeason();
 
+		if (currentSeason == null) {
+			currentSeason = new Dictionary<RlsPlaylistRanked, PlayerRank>();
+		}
+
+
+		var playlists = Enum.GetValues(typeof(RlsPlaylistRanked));
+
+		for (var i = 0; i < playlists.Length; i++) {
+			var playlist = (RlsPlaylistRanked)playlists.GetValue(i);
 			var progressionBar = _progressionBars[playlist];
-			progressionBar.Set(playlist, rank, _currentSeason);
+
+			if (currentSeason.ContainsKey(playlist) == false) {
+				currentSeason.Add(playlist, new PlayerRank());
+			}
+
+			progressionBar.Set(playlist, currentSeason[playlist], _currentSeason);
 		}
 	}
 }

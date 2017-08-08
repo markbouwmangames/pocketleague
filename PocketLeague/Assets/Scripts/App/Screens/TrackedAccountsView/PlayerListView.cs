@@ -18,7 +18,10 @@ public class PlayerListView : MonoBehaviour {
 	[SerializeField]
 	private SimpleRankDisplay _simpleRankDisplay;
 
+	public PlayerReferenceData Player { get; private set; }
+
 	public void Set(PlayerReferenceData playerReference) {
+		Player = playerReference;
 		_playerName.text = playerReference.DisplayName;
 
 		var platform = PlatformTool.GetPlatformData(playerReference.Platform);
@@ -31,6 +34,7 @@ public class PlayerListView : MonoBehaviour {
 		
 		_simpleRankDisplay.Set(Constants.LatestSeason, player.CurrentSeason());
 
+		_button.onClick.RemoveAllListeners();
 		_button.onClick.AddListener(() => {
 			var app = FindObjectOfType<App>();
 			app.SetPlayerView(playerReference);
